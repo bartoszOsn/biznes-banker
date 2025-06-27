@@ -1,4 +1,4 @@
-export enum PlayerColor {
+export enum UserColor {
 	RED = 'red',
 	BLUE = 'blue',
 	GREEN = 'green',
