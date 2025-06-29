@@ -1,1 +1,0 @@
-export const SESSION_ID_QUERY_PARAM = 'session';
