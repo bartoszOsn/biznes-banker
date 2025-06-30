@@ -1,18 +1,40 @@
 import { type ReactNode } from 'react';
 import { DomainContext } from './DomainContext.ts';
 import { createStateMachine } from '../util/createStateMachine.tsx';
-import type { Domain } from './Domain.ts';
+import type { DomainWithoutStarting, DomainWithoutUser, MainDomain } from './Domain.ts';
+import { withoutSessionStateMachineState } from './withoutSessionStateMachineState.ts';
 
 const StateMachine = createStateMachine({
 	states: {
-		withoutSession: {
-			handler: () => {
-				return { state: 'withoutSession' as unknown as Domain, context: [null] as [sessionId: string | null] };
-			}
-		},
+		withoutSession: withoutSessionStateMachineState,
 		withoutUser: {
 			handler: () => {
-				return { state: 'withoutUser' as unknown as Domain, context: [] as [] };
+				return {
+					state: {
+						stage: 'withoutUser'
+					} as DomainWithoutUser,
+					context: [null]
+				};
+			}
+		},
+		withoutStarting:{
+			handler: () => {
+				return {
+					state: {
+						stage: 'withoutStarting'
+					} as DomainWithoutStarting,
+					context: [null]
+				};
+			}
+		},
+		main: {
+			handler: () => {
+				return {
+					state: {
+						stage: 'main'
+					} as MainDomain,
+					context: [null]
+				};
 			}
 		}
 	},

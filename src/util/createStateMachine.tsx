@@ -24,20 +24,23 @@ export interface StateMachineEdge<
 > {
 	from: TFrom;
 	to: TTo;
-	condition?: (context: ReturnType<TStates[TFrom]['handler']>['context']) => boolean;
+	condition: (context: ReturnType<TStates[TFrom]['handler']>['context']) => boolean;
 }
 
 export function createStateMachine<
 	TStates extends Record<string, StateMachineState<any, any>>,
 	TEdges extends Array<StateMachineEdge<TStates, keyof TStates, keyof TStates>>
->(def: StateMachineDef<TStates, TEdges>): (props: { children: ReactNode}) => ReactNode {
+>(def: StateMachineDef<TStates, TEdges>): (props: { children: ReactNode }) => ReactNode {
 	const componentsEntries = Object.entries(def.states).map(([name, state]) => {
 		const useHandler = state.handler;
 		const Context = def.Context;
 
-		const Component = (props: { children: ReactNode, setContext: (context: ReturnType<TStates[keyof TStates]['handler']>['context']) => void }): ReactNode => {
-			const {children, setContext } = props;
-			const { state: currentState, context } = useHandler();
+		const Component = (props: {
+			children: ReactNode,
+			setContext: (context: ReturnType<TStates[keyof TStates]['handler']>['context']) => void
+		}): ReactNode => {
+			const {children, setContext} = props;
+			const {state: currentState, context} = useHandler();
 
 			useEffect(() => {
 				if (context) {
@@ -55,16 +58,30 @@ export function createStateMachine<
 		return [name, Component] as const;
 	});
 
-	const Components = Object.fromEntries(componentsEntries) as Record<keyof TStates, (props: { children: ReactNode, setContext: (context: ReturnType<TStates[keyof TStates]['handler']>['context']) => void }) => ReactNode>;
+	const Components = Object.fromEntries(componentsEntries) as Record<keyof TStates, (props: {
+		children: ReactNode,
+		setContext: (context: ReturnType<TStates[keyof TStates]['handler']>['context']) => void
+	}) => ReactNode>;
 
-	return (props: { children: ReactNode}): ReactNode => {
+	return (props: { children: ReactNode }): ReactNode => {
 		const [currentStateId, setCurrentStateId] = useState(def.initialState);
 		const CurrentComponent = Components[currentStateId];
 
 		const [currentContext, setCurrentContext] = useState<ReturnType<TStates[keyof TStates]['handler']>['context'] | null>(null);
 
 		useEffect(() => {
-			const matchingEdge = def.edges.find(edge => edge.from === currentStateId && (!edge.condition || edge.condition(currentContext || [])));
+			const matchingEdge = def.edges.find(edge => {
+					if (!currentContext) {
+						return false;
+					}
+
+					if (edge.from !== currentStateId) {
+						return false;
+					}
+
+					return edge.condition(currentContext);
+				}
+			);
 			if (matchingEdge) {
 				setCurrentStateId(matchingEdge.to);
 			}

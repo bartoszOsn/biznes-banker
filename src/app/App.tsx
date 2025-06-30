@@ -1,14 +1,9 @@
-import { useState } from 'react';
 import '@mantine/core/styles.css';
-import { Text, MantineProvider, Title } from '@mantine/core';
-import { db } from '../infrastructure/firebase/fb.ts';
-import { push, ref } from 'firebase/database'
+import { MantineProvider, Text, Title } from '@mantine/core';
 import { DomainProvider } from '../domain/DomainProvider.tsx';
 import { useDomain } from '../domain/useDomain.ts';
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<>
 			<MantineProvider>
@@ -24,7 +19,20 @@ function App() {
 export function Test() {
 	const domain = useDomain();
 
-	return <Text>{domain.toString()}</Text>;
+	if (domain.stage === 'withoutSession') {
+		return (
+			<>
+				{domain.stage}
+				<button onClick={domain.startSession}>Start session</button>
+			</>
+		)
+	}
+
+	return (
+		<Text>
+			{domain.stage}
+		</Text>
+	)
 }
 
 export default App
