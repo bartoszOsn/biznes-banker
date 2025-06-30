@@ -5,7 +5,7 @@ import { useState } from 'react';
 const sessionIdQueryParam = 's';
 
 export const withoutSessionStateMachineState = {
-	handler: () => {
+	useHandler: () => {
 		const [sessionId, setSessionId] = useState<string | null>(() => {
 			const urlParams = new URLSearchParams(window.location.search);
 			const sessionIdFromUrl = urlParams.get(sessionIdQueryParam);

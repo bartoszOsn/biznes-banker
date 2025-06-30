@@ -8,7 +8,7 @@ const StateMachine = createStateMachine({
 	states: {
 		withoutSession: withoutSessionStateMachineState,
 		withoutUser: {
-			handler: () => {
+			useHandler: () => {
 				return {
 					state: {
 						stage: 'withoutUser'
@@ -18,7 +18,7 @@ const StateMachine = createStateMachine({
 			}
 		},
 		withoutStarting:{
-			handler: () => {
+			useHandler: () => {
 				return {
 					state: {
 						stage: 'withoutStarting'
@@ -28,7 +28,7 @@ const StateMachine = createStateMachine({
 			}
 		},
 		main: {
-			handler: () => {
+			useHandler: () => {
 				return {
 					state: {
 						stage: 'main'
