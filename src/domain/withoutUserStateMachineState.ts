@@ -43,6 +43,6 @@ export const withoutUserStateMachineState = {
 			}
 		}
 
-		return {state: domain, context: [sessionId, userId]};
+		return {state: domain, context: [sessionId, userId] as const };
 	}
 } satisfies StateMachineState<unknown, unknown[]>

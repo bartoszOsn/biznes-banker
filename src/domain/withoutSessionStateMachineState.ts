@@ -21,6 +21,6 @@ export const withoutSessionStateMachineState = {
 			}
 		}
 
-		return { state: domain, context: [sessionId] };
+		return { state: domain, context: [sessionId] as const };
 	}
 } satisfies StateMachineState<unknown, unknown[]>
