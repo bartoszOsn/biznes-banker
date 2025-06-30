@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { getUserIdLSKey } from './getUserIdLSKey.ts';
 import { pushNewUser } from '../infrastructure/firebase/pushNewUser.ts';
 import type { UserColor } from './model/UserColor.ts';
+import { selectUserCount } from '../infrastructure/firebase/selectUserCount.ts';
 
 export const withoutUserStateMachineState = {
 	useHandler: () => {
@@ -29,15 +30,19 @@ export const withoutUserStateMachineState = {
 				if (userId) {
 					throw new Error('User properties already set.');
 				}
-
-				pushNewUser(sessionId, name, color).then((userId) => {
-					const lsKey = getUserIdLSKey(sessionId);
-					localStorage.setItem(lsKey, userId);
-					setUserId(userId);
-				})
+				selectUserCount(sessionId)
+					.then((userCount) => {
+						const isBanker = userCount === 0;
+						return pushNewUser(sessionId, name, color, isBanker);
+					})
+					.then((userId) => {
+						const lsKey = getUserIdLSKey(sessionId);
+						localStorage.setItem(lsKey, userId);
+						setUserId(userId);
+					});
 			}
 		}
 
-		return { state: domain, context: [sessionId, userId] };
+		return {state: domain, context: [sessionId, userId]};
 	}
 } satisfies StateMachineState<unknown, unknown[]>
