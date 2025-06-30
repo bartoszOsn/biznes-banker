@@ -1,16 +1,12 @@
 import type { StateMachineState } from '../util/createStateMachine.tsx';
 import type { DomainWithoutSession } from './Domain.ts';
-import { useState } from 'react';
-
-const sessionIdQueryParam = 's';
+import { useQueryParam } from '../util/useQueryParam.ts';
+import { SESSION_ID_QUERY_PARAM } from './SESSION_ID_QUERY_PARAM.ts';
+import { pushNewSession } from '../infrastructure/firebase/pushNewSession.ts';
 
 export const withoutSessionStateMachineState = {
 	useHandler: () => {
-		const [sessionId, setSessionId] = useState<string | null>(() => {
-			const urlParams = new URLSearchParams(window.location.search);
-			const sessionIdFromUrl = urlParams.get(sessionIdQueryParam);
-			return sessionIdFromUrl ? sessionIdFromUrl : null;
-		});
+		const [sessionId, setSessionId] = useQueryParam(SESSION_ID_QUERY_PARAM);
 
 		const domain: DomainWithoutSession = {
 			stage: 'withoutSession',
@@ -19,12 +15,9 @@ export const withoutSessionStateMachineState = {
 					return;
 				}
 
-				const newSessionId = crypto.randomUUID();
-				setSessionId(newSessionId);
-
-				const url = new URL(window.location.href);
-				url.searchParams.set(sessionIdQueryParam, newSessionId);
-				window.history.replaceState({}, '', url.toString());
+				pushNewSession().then((newSessionId) => {
+					setSessionId(newSessionId);
+				});
 			}
 		}
 

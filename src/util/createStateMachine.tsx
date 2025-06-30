@@ -84,6 +84,7 @@ export function createStateMachine<
 			);
 			if (matchingEdge) {
 				setCurrentStateId(matchingEdge.to);
+				setCurrentContext(null);
 			}
 		}, [currentStateId, currentContext]);
 

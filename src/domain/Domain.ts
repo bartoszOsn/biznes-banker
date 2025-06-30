@@ -1,5 +1,6 @@
 import type { User } from './model/User.ts';
 import type { Transaction } from './model/Transaction.ts';
+import type { UserColor } from './model/UserColor.ts';
 
 export type Domain = DomainWithoutSession
 	| DomainWithoutUser
@@ -13,7 +14,7 @@ export interface DomainWithoutSession {
 
 export interface DomainWithoutUser {
 	stage: 'withoutUser';
-	setUserProps: (props: Omit<User, 'id' | 'isAlsoBanker'>) => void;
+	setUserProps: (name: string, color: UserColor) => void;
 }
 
 export interface DomainWithoutStarting {

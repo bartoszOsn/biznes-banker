@@ -3,20 +3,12 @@ import { DomainContext } from './DomainContext.ts';
 import { createStateMachine } from '../util/createStateMachine.tsx';
 import type { DomainWithoutStarting, DomainWithoutUser, MainDomain } from './Domain.ts';
 import { withoutSessionStateMachineState } from './withoutSessionStateMachineState.ts';
+import { withoutUserStateMachineState } from './withoutUserStateMachineState.ts';
 
 const StateMachine = createStateMachine({
 	states: {
 		withoutSession: withoutSessionStateMachineState,
-		withoutUser: {
-			useHandler: () => {
-				return {
-					state: {
-						stage: 'withoutUser'
-					} as DomainWithoutUser,
-					context: [null]
-				};
-			}
-		},
+		withoutUser: withoutUserStateMachineState,
 		withoutStarting:{
 			useHandler: () => {
 				return {
@@ -43,6 +35,16 @@ const StateMachine = createStateMachine({
 			from: 'withoutSession',
 			to: 'withoutUser',
 			condition: ([sessionId]) => sessionId !== null,
+		},
+		{
+			from: 'withoutUser',
+			to: 'withoutSession',
+			condition: ([sessionId]) => sessionId === null,
+		},
+		{
+			from: 'withoutUser',
+			to: 'withoutStarting',
+			condition: ([sessionId, userId]) => sessionId !== null && userId !== null,
 		}
 	],
 	initialState: 'withoutSession',

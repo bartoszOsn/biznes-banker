@@ -1,14 +1,14 @@
 import type { UserColor } from '../../domain/model/UserColor.ts';
 
 export interface SessionDTO {
-	createdAt: string;
+	createdAt: number;
 	started: boolean;
+	bankerUserId: string | null;
 	users: {
 		[key: string]: {
 			name: string;
 			color: UserColor;
-			isAlsoBanker: boolean;
-		}
+		};
 	},
 	operations: Array<{
 		moneyFromPlayerId: 'banker' | string;
