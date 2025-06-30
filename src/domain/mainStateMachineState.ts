@@ -6,6 +6,8 @@ import { useMemo } from 'react';
 import { getUserIdLSKey } from './getUserIdLSKey.ts';
 import { useSelectSessionStarted } from '../infrastructure/firebase/useSelectSessionStarted.ts';
 import { useSelectSessionUsers } from '../infrastructure/firebase/useSelectSessionUsers.ts';
+import { useSelectTransactions } from '../infrastructure/firebase/useSelectTransactions.ts';
+import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
 
 export const mainStateMachineState = {
 	useHandler: () => {
@@ -28,11 +30,38 @@ export const mainStateMachineState = {
 			throw new Error('User not found in session users.');
 		}
 
+		const transactions = useSelectTransactions(sessionId);
+		const balance = useMemo(() => {
+			return transactions.reduce((acc, tr) => {
+				if (tr.fromUserId === userId) {
+					return acc - tr.amount;
+				}
+				if (tr.toUserId === userId) {
+					return acc + tr.amount;
+				}
+				return acc;
+			}, 0)
+		}, [transactions, userId]);
+
 		const domain: MainDomain = {
 			stage: 'main',
 			me,
 			opponents,
-			// TODO
+			transactions,
+			balance,
+			transfer: (toUserId: string, amount: number) => {
+				if (toUserId === userId) {
+					throw new Error('Cannot transfer money to yourself.');
+				}
+				if (amount <= 0) {
+					throw new Error('Transfer amount must be greater than zero.');
+				}
+				if (amount > balance) {
+					throw new Error('Insufficient balance for transfer.');
+				}
+
+				pushTransaction(sessionId, userId, toUserId, amount).then();
+			}
 		};
 
 		return {

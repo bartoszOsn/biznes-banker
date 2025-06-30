@@ -10,9 +10,12 @@ export interface SessionDTO {
 			color: UserColor;
 		};
 	},
-	operations: Array<{
-		moneyFromPlayerId: 'banker' | string;
-		moneyToPlayerId: 'banker' | string;
-		amount: number;
-	}>
+	operations: {
+		[key: string]: {
+			moneyFromPlayerId: 'banker' | string;
+			moneyToPlayerId: 'banker' | string;
+			amount: number;
+			timestamp: number;
+		}
+	};
 }
