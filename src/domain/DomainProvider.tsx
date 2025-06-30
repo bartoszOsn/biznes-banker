@@ -1,34 +1,17 @@
 import { type ReactNode } from 'react';
 import { DomainContext } from './DomainContext.ts';
 import { createStateMachine } from '../util/createStateMachine.tsx';
-import type { DomainWithoutStarting, DomainWithoutUser, MainDomain } from './Domain.ts';
 import { withoutSessionStateMachineState } from './withoutSessionStateMachineState.ts';
 import { withoutUserStateMachineState } from './withoutUserStateMachineState.ts';
+import { withoutStartingStateMachineState } from './withoutStartingStateMachineState.ts';
+import { mainStateMachineState } from './mainStateMachineState.ts';
 
 const StateMachine = createStateMachine({
 	states: {
 		withoutSession: withoutSessionStateMachineState,
 		withoutUser: withoutUserStateMachineState,
-		withoutStarting:{
-			useHandler: () => {
-				return {
-					state: {
-						stage: 'withoutStarting'
-					} as DomainWithoutStarting,
-					context: [null]
-				};
-			}
-		},
-		main: {
-			useHandler: () => {
-				return {
-					state: {
-						stage: 'main'
-					} as MainDomain,
-					context: [null]
-				};
-			}
-		}
+		withoutStarting: withoutStartingStateMachineState,
+		main: mainStateMachineState
 	},
 	edges: [
 		{
@@ -38,13 +21,15 @@ const StateMachine = createStateMachine({
 		},
 		{
 			from: 'withoutUser',
-			to: 'withoutSession',
-			condition: ([sessionId]) => sessionId === null,
-		},
-		{
-			from: 'withoutUser',
 			to: 'withoutStarting',
 			condition: ([sessionId, userId]) => sessionId !== null && userId !== null,
+		},
+
+		// Returns without session
+		{
+			from: 'withoutUser',
+			to: 'withoutSession',
+			condition: ([sessionId]) => sessionId === null,
 		}
 	],
 	initialState: 'withoutSession',
