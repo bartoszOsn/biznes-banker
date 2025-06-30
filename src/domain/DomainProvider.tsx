@@ -40,6 +40,30 @@ const StateMachine = createStateMachine({
 			from: 'withoutStarting',
 			to: 'withoutSession',
 			condition: ([sessionId]) => sessionId === null,
+		},
+		{
+			from: 'main',
+			to: 'withoutSession',
+			condition: ([sessionId]) => sessionId === null,
+		},
+
+		// Returns without user
+		{
+			from: 'withoutStarting',
+			to: 'withoutUser',
+			condition: ([sessionId, userId]) => sessionId !== null && userId === null,
+		},
+		{
+			from: 'main',
+			to: 'withoutUser',
+			condition: ([sessionId, userId]) => sessionId !== null && userId === null,
+		},
+
+		// Returns without starting
+		{
+			from: 'main',
+			to: 'withoutStarting',
+			condition: ([sessionId, userId, sessionStarted]) => sessionId !== null && userId !== null && sessionStarted === false,
 		}
 	],
 	initialState: 'withoutSession',
