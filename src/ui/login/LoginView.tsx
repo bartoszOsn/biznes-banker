@@ -19,11 +19,13 @@ export function LoginView() {
 	const onNext = useCallback(() => {
 		if (!name) {
 			triggerShakeName();
-			return;
 		}
 
 		if (!color) {
 			triggerShakeColor();
+		}
+
+		if (!name || !color) {
 			return;
 		}
 
@@ -71,7 +73,7 @@ export function LoginView() {
 								  textTransform: 'uppercase',
 								  animationName: shakeColor ? 'shake' : undefined,
 								  animationDuration: '300ms'
-						}}>
+							  }}>
 							Select a color
 						</Text>
 						<UserColorPicker value={color ?? undefined} onChange={setColor}/>
