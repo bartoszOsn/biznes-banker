@@ -33,7 +33,7 @@ export function WaitForUsersView() {
 					<Title c="white" style={{textTransform: 'uppercase', textAlign: 'center'}} size={'sm'}>Waiting for other players</Title>
 					<Card w={'100%'}>
 						<Text size="xs" style={{textAlign: 'center'}}>Share this link with them</Text>
-						<TextInput value={domain.joinLink} rightSection={(
+						<TextInput value={domain.joinLink} readOnly rightSection={(
 							<CopyButton value={domain.joinLink}>
 								{
 									({copied, copy}) => (

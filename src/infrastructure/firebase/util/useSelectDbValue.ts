@@ -12,7 +12,7 @@ export function useSelectDbValue<T>(ref: DbRef<T>): T | null {
 		});
 
 		return unsubscribe;
-	});
+	}, []); // TODO: Add ref as a dependency if necessary
 
 	return value;
 }
