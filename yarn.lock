@@ -1977,6 +1977,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.34.0":
+  version: 3.34.0
+  resolution: "@tabler/icons-react@npm:3.34.0"
+  dependencies:
+    "@tabler/icons": 3.34.0
+  peerDependencies:
+    react: ">= 16"
+  checksum: d482145ac69b29b9d19de6269725615d50159374076857fe4f16f69cf8b75442b92a93e882da75704dbe30cfbe3a3ca67cd4673b28880aba5c77531d15df45a5
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.34.0":
+  version: 3.34.0
+  resolution: "@tabler/icons@npm:3.34.0"
+  checksum: 659dc673b62bde12b8418e544d23c022180b32d345e479ba97a3d23531e164d7445716bc0904ce084d08e1ddf9d5fe0da11edd1e86b3c8eda7a53cbca819c162
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -6076,6 +6094,7 @@ __metadata:
     "@mantine/core": ^8.1.2
     "@mantine/hooks": ^8.1.2
     "@mantine/notifications": ^8.1.2
+    "@tabler/icons-react": ^3.34.0
     "@types/react": ^19.1.8
     "@types/react-dom": ^19.1.6
     "@vitejs/plugin-react": ^4.5.2

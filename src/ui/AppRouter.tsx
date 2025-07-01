@@ -2,7 +2,7 @@ import { useDomain } from '../domain/useDomain.ts';
 import { StartSessionView } from './start-session/StartSessionView.tsx';
 import { LoginView } from './login/LoginView.tsx';
 import { ScreenTransition } from '../util/ScreenTransition.tsx';
-import { WaitForUsersView } from './wait-for-users/WaitForUsersView.ts';
+import { WaitForUsersView } from './wait-for-users/WaitForUsersView.tsx';
 
 export function AppRouter() {
 	const domain = useDomain();
