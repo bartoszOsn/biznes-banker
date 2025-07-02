@@ -19,7 +19,7 @@ export interface DomainWithoutUser {
 
 export interface DomainWithoutStarting {
 	stage: 'withoutStarting';
-	me: User | null;
+	me: User;
 	opponents: User[];
 	joinLink: string;
 	startGame: () => void;
@@ -27,7 +27,7 @@ export interface DomainWithoutStarting {
 
 export interface MainDomain {
 	stage: 'main';
-	me: User | null;
+	me: User;
 	opponents: User[];
 	balance: number;
 	transactions: Transaction[],
