@@ -27,7 +27,7 @@ export interface DomainWithoutStarting {
 
 export interface MainDomain {
 	stage: 'main';
-	me: User;
+	me: User | null;
 	opponents: User[];
 	balance: number;
 	transactions: Transaction[],

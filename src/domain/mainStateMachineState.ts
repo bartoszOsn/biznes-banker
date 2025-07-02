@@ -26,10 +26,6 @@ export const mainStateMachineState = {
 		const me = useMemo(() => users.find(user => user.id === userId) ?? null, [users, userId]);
 		const opponents = useMemo(() => users.filter(user => user.id !== userId), [users, userId]);
 
-		if (!me) {
-			throw new Error('User not found in session users.');
-		}
-
 		const transactions = useSelectTransactions(sessionId);
 		const balance = useMemo(() => {
 			return transactions.reduce((acc, tr) => {

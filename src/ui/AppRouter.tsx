@@ -3,6 +3,7 @@ import { StartSessionView } from './start-session/StartSessionView.tsx';
 import { LoginView } from './login/LoginView.tsx';
 import { ScreenTransition } from '../util/ScreenTransition.tsx';
 import { WaitForUsersView } from './wait-for-users/WaitForUsersView.tsx';
+import { MainView } from './main/MainView.ts';
 
 export function AppRouter() {
 	const domain = useDomain();
@@ -12,6 +13,7 @@ export function AppRouter() {
 			{domain.stage === 'withoutSession' && <StartSessionView />}
 			{domain.stage === 'withoutUser' && <LoginView />}
 			{domain.stage === 'withoutStarting' && <WaitForUsersView />}
+			{domain.stage === 'main' && <MainView />}
 		</ScreenTransition>
 	)
 }
