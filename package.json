@@ -6,6 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
+		"build:emulator": "tsc -b && vite build --mode emulator",
+		"deploy": "yarn build && firebase deploy",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},

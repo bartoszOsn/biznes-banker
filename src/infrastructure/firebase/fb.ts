@@ -14,6 +14,6 @@ const firebaseConfig = {
 export const fb = initializeApp(firebaseConfig);
 export const db = getDatabase(fb);
 
-if (import.meta.env.MODE === 'development') {
-	connectDatabaseEmulator(db, 'localhost', 9000);
+if (__EMULATOR_URL__) {
+	connectDatabaseEmulator(db, __EMULATOR_URL__, 9000);
 }
