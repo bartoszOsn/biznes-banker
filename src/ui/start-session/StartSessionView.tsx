@@ -1,5 +1,5 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { Avatar, BackgroundImage, Box, Button, Image, Stack, Text, Title } from '@mantine/core';
+import { Avatar, Box, Button, Image, Stack, Text, Title } from '@mantine/core';
 import capitalist from '../../assets/capitalist.svg';
 import dollarGrid from '../../assets/dollar-grid.webp';
 import { useCallback } from 'react';
