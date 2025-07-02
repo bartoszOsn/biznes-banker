@@ -1,28 +1,25 @@
-import { AppShell, Avatar, ColorSwatch, Group, Stack } from '@mantine/core';
-import type { MainDomain } from '../../domain/Domain.ts';
-import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { userColorToMantine } from '../../domain/model/UserColor.ts';
+import { AppShell, Stack, useMantineColorScheme } from '@mantine/core';
+import { MainViewHeader } from './MainViewHeader.tsx';
+import { MainViewView } from './MainViewView.ts';
+import { useEffect, useState } from 'react';
 
 export function MainView() {
-	const domain: MainDomain = useDomainOfType('main');
+	const [view, setView] = useState(MainViewView.USER);
+
+	const { setColorScheme } = useMantineColorScheme();
+
+	useEffect(() => {
+		if (view === 'user') {
+			setColorScheme('light');
+		} else {
+			setColorScheme('dark');
+		}
+	}, [view, setColorScheme]);
 
 	return (
 		<AppShell header={{ height: 60 }} padding="md">
 			<AppShell.Header>
-				<Group w='100%' h='100%' justify='space-between' align='center' px='md'>
-					<Group>
-						<ColorSwatch color={userColorToMantine(domain.me.color)} />
-						<text style={{ textTransform: 'uppercase'}}>{domain.me.name}</text>
-					</Group>
-					{
-						domain.me.isAlsoBanker && (
-							<Group>
-								<ColorSwatch color='gray' />
-								<text style={{ textTransform: 'uppercase'}}>Banker</text>
-							</Group>
-						)
-					}
-				</Group>
+				<MainViewHeader view={view} onViewChange={setView} />
 			</AppShell.Header>
 			<AppShell.Main>
 				<Stack w='100%' justify='space-between' align='center' px='md'>
