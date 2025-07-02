@@ -1,9 +1,10 @@
 import type { MainDomain } from './Domain.ts';
-import { filter, map, type Observable } from 'rxjs';
+import { combineLatest, filter, map, type Observable } from 'rxjs';
 import { selectSessionUsers } from '../infrastructure/firebase/selectSessionUsers.ts';
-import { combineLatest } from 'rxjs';
 import { selectTransactions } from '../infrastructure/firebase/selectTransactions.ts';
 import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
+import type { User } from './model/User.ts';
+import { UserColor } from './model/UserColor.ts';
 
 export function selectMainDomain(sessionId: string, userId: string): Observable<MainDomain> {
 	return combineLatest([
@@ -32,7 +33,7 @@ export function selectMainDomain(sessionId: string, userId: string): Observable<
 				return ({
 					stage: 'main',
 					me: me!,
-					opponents,
+					opponents: [...opponents, ...mockUsers], // Mock users for testing
 					balance: balance,
 					transactions: transactions,
 					transfer: (toUserId: string, amount: number) => {
@@ -52,3 +53,30 @@ export function selectMainDomain(sessionId: string, userId: string): Observable<
 			})
 		);
 }
+
+const mockUsers: User[] = [
+	{
+		id: 'mock1',
+		name: 'Bartek',
+		color: UserColor.GREEN,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock2',
+		name: 'Krzysztof',
+		color: UserColor.YELLOW,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock3',
+		name: 'Janusz',
+		color: UserColor.RED,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock4',
+		name: 'Marek',
+		color: UserColor.BLUE,
+		isAlsoBanker: false
+	}
+]

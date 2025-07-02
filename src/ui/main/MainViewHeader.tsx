@@ -1,5 +1,5 @@
 import { MainViewView } from './MainViewView.ts';
-import { Avatar, Button, Group } from '@mantine/core';
+import { Avatar, Button, Group, Text } from '@mantine/core';
 import { userColorToMantine } from '../../domain/model/UserColor.ts';
 import type { MainDomain } from '../../domain/Domain.ts';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
@@ -36,7 +36,7 @@ function HeaderUser(props: { name: string, color: string, isSelected: boolean, o
 				color={props.color}
 				onClick={props.onClick}
 		leftSection={<Avatar color={props.color} size="sm"/>}>
-			<text style={{textTransform: 'uppercase'}}>{props.name}</text>
+			<Text style={{textTransform: 'uppercase'}}>{props.name}</Text>
 		</Button>
 	);
 }

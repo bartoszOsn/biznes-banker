@@ -1,9 +1,13 @@
-import { AppShell, Stack, useMantineColorScheme } from '@mantine/core';
+import { AppShell, useMantineColorScheme } from '@mantine/core';
 import { MainViewHeader } from './MainViewHeader.tsx';
 import { MainViewView } from './MainViewView.ts';
 import { useEffect, useState } from 'react';
+import { useDomainOfType } from '../../domain/useDomainOfType.ts';
+import { MainViewUserView } from './MainViewUserView.tsx';
+import { MainViewBankerView } from './MainViewBankerView.tsx';
 
 export function MainView() {
+	const domain = useDomainOfType('main');
 	const [view, setView] = useState(MainViewView.USER);
 
 	const { setColorScheme } = useMantineColorScheme();
@@ -22,9 +26,8 @@ export function MainView() {
 				<MainViewHeader view={view} onViewChange={setView} />
 			</AppShell.Header>
 			<AppShell.Main>
-				<Stack w='100%' justify='space-between' align='center' px='md'>
-					$15000
-				</Stack>
+				{ view === MainViewView.USER && <MainViewUserView />}
+				{ view === MainViewView.BANKER && <MainViewBankerView />}
 			</AppShell.Main>
 			<AppShell.Footer px='md' py='sm'>
 				Bartek ➜ Michał: $1000
