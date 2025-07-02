@@ -10,7 +10,7 @@ export async function pushNewSession(): Promise<string> {
 		started: false,
 		bankerUserId: null,
 		users: {},
-		operations: []
+		operations: {}
 	};
 
 	const ref = await push(sessionsRef, session);
