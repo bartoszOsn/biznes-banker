@@ -5,8 +5,8 @@ import { serverTimestamp, push } from 'firebase/database';
 
 export async function pushTransaction(
 	sessionId: string,
-	userId: string,
-	toUserId: string,
+	userId: 'banker' | string,
+	toUserId: 'banker' | string,
 	amount: number
 ): Promise<void> {
 	const ref = getRef(db, sessionId, 'operations');

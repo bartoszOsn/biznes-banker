@@ -1,5 +1,5 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { Avatar, Button, Divider, Image, Stack, Text, Title } from '@mantine/core';
+import { Avatar, Button, Divider, Image, Stack, Title } from '@mantine/core';
 import capitalist from '../../assets/capitalist.svg';
 import { userColorToMantine } from '../../domain/model/UserColor.ts';
 

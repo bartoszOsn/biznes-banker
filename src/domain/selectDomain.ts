@@ -7,11 +7,12 @@ import { getUserIdLSKey } from './getUserIdLSKey.ts';
 import { selectDomainWithoutUser } from './selectDomainWithoutUser.ts';
 import { selectSessionStarted } from '../infrastructure/firebase/selectSessionStarted.ts';
 import { selectDomainWithoutStarting } from './selectDomainWithoutStarting.ts';
-import { selectMainDomain } from './selectMainDomain.ts';
+import { createSelectMainDomain } from './selectMainDomain.ts';
 
 export function selectDomain(): Observable<Domain> {
 	const sessionId$ = new BehaviorSubject<string | null>(getQueryParamValue(SESSION_ID_QUERY_PARAM));
 	const userId$ = new Subject<string>();
+	const selectMainDomain = createSelectMainDomain();
 
 	return sessionId$
 		.pipe(

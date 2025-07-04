@@ -1,13 +1,16 @@
-import type { MainDomain } from './Domain.ts';
-import { combineLatest, filter, map, type Observable } from 'rxjs';
+import type { MainDomain, MainDomainWithBanker, MainDomainWithoutBanker } from './Domain.ts';
+import { BehaviorSubject, combineLatest, filter, map, type Observable, of, switchMap } from 'rxjs';
 import { selectSessionUsers } from '../infrastructure/firebase/selectSessionUsers.ts';
 import { selectTransactions } from '../infrastructure/firebase/selectTransactions.ts';
 import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
 import type { User } from './model/User.ts';
 import { UserColor } from './model/UserColor.ts';
+import { CircumstanceRole } from './model/CircumstanceRole.ts';
 
-export function selectMainDomain(sessionId: string, userId: string): Observable<MainDomain> {
-	return combineLatest([
+export function createSelectMainDomain() {
+	const currentRole$ = new BehaviorSubject(CircumstanceRole.USER);
+
+	return (sessionId: string, userId: string): Observable<MainDomain> => combineLatest([
 		selectSessionUsers(sessionId),
 		selectTransactions(sessionId)
 	])
@@ -19,7 +22,7 @@ export function selectMainDomain(sessionId: string, userId: string): Observable<
 				return [me, opponents, transactions] as const;
 			}),
 			filter(([me]) => me !== undefined),
-			map(([me, opponents, transactions]) => {
+			switchMap(([me, opponents, transactions]) => {
 				const balance = transactions.reduce((acc, tr) => {
 					if (tr.fromUserId === userId) {
 						return acc - tr.amount;
@@ -30,29 +33,56 @@ export function selectMainDomain(sessionId: string, userId: string): Observable<
 					return acc;
 				}, 0);
 
-				return ({
+				const transfer = (toUserId: string, amount: number) => {
+					if (toUserId === userId) {
+						throw new Error('Cannot transfer money to yourself.');
+					}
+					if (amount <= 0) {
+						throw new Error('Transfer amount must be greater than zero.');
+					}
+					if (amount > balance) {
+						throw new Error('Insufficient balance for transfer.');
+					}
+
+					pushTransaction(sessionId, userId, toUserId, amount).then();
+				}
+
+				if (me!.isAlsoBanker) {
+					const transferAsBanker = (toUserId: string, amount: number) => {
+						pushTransaction(sessionId, 'banker', toUserId, amount).then();
+					}
+
+					return currentRole$
+						.pipe(map(role => ({
+							stage: 'main',
+							me: me!,
+							isBanker: true,
+							opponents: [...opponents, ...mockUsers], // Mock users for testing
+							balance: balance,
+							transactions: transactions,
+							transfer: transfer,
+							transferAsBanker: transferAsBanker,
+							role: role,
+							setRole: (role: CircumstanceRole) => {
+								currentRole$.next(role);
+							}
+						} satisfies MainDomainWithBanker)))
+				}
+
+				return of({
 					stage: 'main',
 					me: me!,
+					isBanker: false,
 					opponents: [...opponents, ...mockUsers], // Mock users for testing
 					balance: balance,
 					transactions: transactions,
-					transfer: (toUserId: string, amount: number) => {
-						if (toUserId === userId) {
-							throw new Error('Cannot transfer money to yourself.');
-						}
-						if (amount <= 0) {
-							throw new Error('Transfer amount must be greater than zero.');
-						}
-						if (amount > balance) {
-							throw new Error('Insufficient balance for transfer.');
-						}
-
-						pushTransaction(sessionId, userId, toUserId, amount).then();
-					}
-				});
+					transfer: transfer
+				} satisfies MainDomainWithoutBanker);
 			})
-		);
+		)
 }
+
+
 
 const mockUsers: User[] = [
 	{

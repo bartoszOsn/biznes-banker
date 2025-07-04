@@ -1,6 +1,7 @@
-import type { User } from './model/User.ts';
+import type { User, UserWithBanker, UserWithoutBanker } from './model/User.ts';
 import type { Transaction } from './model/Transaction.ts';
 import type { UserColor } from './model/UserColor.ts';
+import type { CircumstanceRole } from './model/CircumstanceRole.ts';
 
 export type Domain = DomainWithoutSession
 	| DomainWithoutUser
@@ -25,11 +26,25 @@ export interface DomainWithoutStarting {
 	startGame: () => void;
 }
 
-export interface MainDomain {
+export interface BaseMainDomain {
 	stage: 'main';
-	me: User;
 	opponents: User[];
 	balance: number;
-	transactions: Transaction[],
+	transactions: Transaction[];
 	transfer: (toUserId: string, amount: number) => void;
 }
+
+export interface MainDomainWithBanker extends BaseMainDomain {
+	me: UserWithBanker;
+	isBanker: true;
+	transferAsBanker: (toUserId: string, amount: number) => void;
+	role: CircumstanceRole;
+	setRole: (role: CircumstanceRole) => void;
+}
+
+export interface MainDomainWithoutBanker extends BaseMainDomain {
+	me: UserWithoutBanker;
+	isBanker: false;
+}
+
+export type MainDomain = MainDomainWithBanker | MainDomainWithoutBanker;

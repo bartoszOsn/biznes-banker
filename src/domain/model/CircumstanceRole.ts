@@ -1,4 +1,4 @@
-export enum MainViewView {
+export enum CircumstanceRole {
 	USER = 'user',
 	BANKER = 'banker',
 }

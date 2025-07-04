@@ -1,29 +1,24 @@
-import { MainViewView } from './MainViewView.ts';
+import { CircumstanceRole } from '../../domain/model/CircumstanceRole.ts';
 import { Avatar, Button, Group, Text } from '@mantine/core';
 import { userColorToMantine } from '../../domain/model/UserColor.ts';
 import type { MainDomain } from '../../domain/Domain.ts';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 
-export interface MainViewHeaderProps {
-	view: MainViewView;
-	onViewChange: (view: MainViewView) => void;
-}
-
-export function MainViewHeader(props: MainViewHeaderProps) {
+export function MainViewHeader() {
 	const domain: MainDomain = useDomainOfType('main');
 
 	return (
 		<Group w='100%' h='100%' justify='space-between' align='center' px='md'>
 			<HeaderUser name={domain.me.name}
 						color={userColorToMantine(domain.me.color)}
-						isSelected={props.view === MainViewView.USER}
-						onClick={() => props.onViewChange(MainViewView.USER)}/>
+						isSelected={!domain.isBanker || domain.role === CircumstanceRole.USER}
+						onClick={() => domain.isBanker && domain.setRole(CircumstanceRole.USER)}/>
 			{
-				domain.me.isAlsoBanker && (
+				domain.isBanker && (
 					<HeaderUser name='Banker'
 								color='gray'
-								isSelected={props.view === MainViewView.BANKER}
-								onClick={() => props.onViewChange(MainViewView.BANKER)}/>
+								isSelected={domain.role === CircumstanceRole.BANKER}
+								onClick={() => domain.setRole(CircumstanceRole.BANKER)}/>
 				)
 			}
 		</Group>
