@@ -18,6 +18,10 @@ export function MainView() {
 		} else {
 			setColorScheme('dark');
 		}
+
+		return () => {
+			setColorScheme('light');
+		}
 	}, [view, setColorScheme]);
 
 	return (
