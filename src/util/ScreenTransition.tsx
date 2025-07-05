@@ -47,10 +47,7 @@ export function ScreenTransition({ children, transitionDuration = 300 }: ScreenT
 
 	return (
 		<>
-		<Box ref={boxRef}
-			 w={'100%'}
-			 h={'100vh'}
-			 style={{overflow: 'hidden'}}>
+		<Box ref={boxRef}>
 				{state.type === 'revealed' && children}
 				{ state.type === 'exiting' && (
 					<Box w={'100%'}

@@ -108,5 +108,29 @@ const mockUsers: User[] = [
 		name: 'Marek',
 		color: UserColor.BLUE,
 		isAlsoBanker: false
+	},
+	{
+		id: 'mock1',
+		name: 'Bartek',
+		color: UserColor.GREEN,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock2',
+		name: 'Krzysztof',
+		color: UserColor.YELLOW,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock3',
+		name: 'Janusz',
+		color: UserColor.RED,
+		isAlsoBanker: false
+	},
+	{
+		id: 'mock4',
+		name: 'Marek',
+		color: UserColor.BLUE,
+		isAlsoBanker: false
 	}
 ]

@@ -25,7 +25,7 @@ export function MainView() {
 	}, [role]);
 
 	return (
-		<AppShell header={{ height: 60 }} padding="md">
+		<AppShell header={{ height: 60 }} footer={{ height: '50'}} padding="md">
 			<AppShell.Header>
 				<MainViewHeader />
 			</AppShell.Header>
