@@ -1,7 +1,7 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { Avatar, Button, Divider, Image, Stack, Title } from '@mantine/core';
+import { Avatar, Divider, Image, Stack, Title } from '@mantine/core';
 import capitalist from '../../assets/capitalist.svg';
-import { userColorToMantine } from '../../domain/model/UserColor.ts';
+import { MainViewBankerViewTransferButton } from './banker/MainViewBankerViewTransferButton.tsx';
 
 export function MainViewBankerView() {
 	const domain = useDomainOfType('main');
@@ -16,20 +16,14 @@ export function MainViewBankerView() {
 			</Avatar>
 			<Stack gap='md' w='100%'>
 				<Title order={2}>Transfer to:</Title>
-				<Button color={userColorToMantine(domain.me.color)} size='xl'>
-					{domain.me.name}
-				</Button>
+				<MainViewBankerViewTransferButton transferTo={domain.me} />
 				{
 					domain.opponents.map(opponent => (
-						<Button key={opponent.id} color={userColorToMantine(opponent.color)} size='xl'>
-							{opponent.name}
-						</Button>
+						<MainViewBankerViewTransferButton key={opponent.id} transferTo={opponent} />
 					))
 				}
 				<Divider />
-				<Button color='gray' size='xl'>
-					All of them
-				</Button>
+				<MainViewBankerViewTransferButton transferTo={'all'} />
 			</Stack>
 		</Stack>
 	)

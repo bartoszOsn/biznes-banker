@@ -1,5 +1,5 @@
 import type { MantineColorSchemeManager, MantineColorScheme } from '@mantine/core';
-import { Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 
 export function createNoopColorSchemeManager(): MantineColorSchemeManager {
 	let colorScheme: MantineColorScheme | null = null;
@@ -13,7 +13,7 @@ export function createNoopColorSchemeManager(): MantineColorSchemeManager {
 			colorScheme$.next(value);
 		},
 		subscribe: (onUpdate) => {
-			subscription = colorScheme$.subscribe(onUpdate);
+			subscription = colorScheme$.pipe(distinctUntilChanged()).subscribe(onUpdate);
 		},
 		unsubscribe: () => {
 			subscription?.unsubscribe();

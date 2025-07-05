@@ -38,6 +38,7 @@ export interface MainDomainWithBanker extends BaseMainDomain {
 	me: UserWithBanker;
 	isBanker: true;
 	transferAsBanker: (toUserId: string, amount: number) => void;
+	transferAsBankerToAll: (amount: number) => void;
 	role: CircumstanceRole;
 	setRole: (role: CircumstanceRole) => void;
 }

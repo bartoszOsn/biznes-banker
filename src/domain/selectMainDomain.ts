@@ -52,6 +52,12 @@ export function createSelectMainDomain() {
 						pushTransaction(sessionId, 'banker', toUserId, amount).then();
 					}
 
+					const transferAsBankerToAll = (amount: number) => {
+						for (const user of [me!, ...opponents]) {
+							transferAsBanker(user.id, amount);
+						}
+					}
+
 					return currentRole$
 						.pipe(map(role => ({
 							stage: 'main',
@@ -62,6 +68,7 @@ export function createSelectMainDomain() {
 							transactions: transactions,
 							transfer: transfer,
 							transferAsBanker: transferAsBanker,
+							transferAsBankerToAll: transferAsBankerToAll,
 							role: role,
 							setRole: (role: CircumstanceRole) => {
 								currentRole$.next(role);
@@ -85,30 +92,6 @@ export function createSelectMainDomain() {
 
 
 const mockUsers: User[] = [
-	{
-		id: 'mock1',
-		name: 'Bartek',
-		color: UserColor.GREEN,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock2',
-		name: 'Krzysztof',
-		color: UserColor.YELLOW,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock3',
-		name: 'Janusz',
-		color: UserColor.RED,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock4',
-		name: 'Marek',
-		color: UserColor.BLUE,
-		isAlsoBanker: false
-	},
 	{
 		id: 'mock1',
 		name: 'Bartek',
