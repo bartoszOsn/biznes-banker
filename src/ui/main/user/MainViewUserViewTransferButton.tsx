@@ -4,9 +4,10 @@ import { Button, Grid, Modal, NumberInput, Stack, useMantineTheme } from '@manti
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
+import { IconBuildingBank } from '@tabler/icons-react';
 
 export interface MainViewUserViewTransferButtonProps {
-	transferTo: 'all' | User;
+	transferTo: 'all' | 'banker' | User;
 }
 
 export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewTransferButtonProps) {
@@ -29,6 +30,8 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 
 		if (transferTo === 'all') {
 			domain.transferToAllButMe(amount);
+		}  else if (transferTo === 'banker') {
+			domain.transferToBanker(amount);
 		} else {
 			domain.transfer(transferTo.id, amount);
 		}
@@ -42,6 +45,15 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 					<Grid.Col span={12}>
 						<Button variant={'gradient'} size='xl' w='100%' onClick={open}>
 							All of them
+						</Button>
+					</Grid.Col>
+				)
+			}
+			{
+				transferTo === 'banker' && (
+					<Grid.Col span={12}>
+						<Button leftSection={<IconBuildingBank />} variant={'gradient'} gradient={{ from: 'dark', to: 'gray' }} size='xl' w='100%' onClick={open}>
+							Banker
 						</Button>
 					</Grid.Col>
 				)

@@ -32,6 +32,7 @@ export interface BaseMainDomain {
 	balance: number;
 	transactions: Transaction[];
 	transfer: (toUserId: string, amount: number) => void;
+	transferToBanker: (amount: number) => void;
 	transferToAllButMe: (amount: number) => void;
 }
 

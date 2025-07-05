@@ -58,6 +58,17 @@ export function createSelectMainDomain() {
 					}
 				}
 
+				const transferToBanker = (amount: number) => {
+					if (amount <= 0) {
+						throw new Error('Transfer amount must be greater than zero.');
+					}
+					if (amount > balance) {
+						throw new Error('Insufficient balance for transfer.');
+					}
+
+					pushTransaction(sessionId, userId, 'banker', amount).then();
+				}
+
 				if (me!.isAlsoBanker) {
 					const transferAsBanker = (toUserId: string, amount: number) => {
 						pushTransaction(sessionId, 'banker', toUserId, amount).then();
@@ -79,6 +90,7 @@ export function createSelectMainDomain() {
 							transactions: transactions,
 							transfer: transfer,
 							transferToAllButMe: transferToAllButMe,
+							transferToBanker: transferToBanker,
 							transferAsBanker: transferAsBanker,
 							transferAsBankerToAll: transferAsBankerToAll,
 							role: role,
@@ -96,7 +108,8 @@ export function createSelectMainDomain() {
 					balance: balance,
 					transactions: transactions,
 					transfer: transfer,
-					transferToAllButMe: transferToAllButMe
+					transferToAllButMe: transferToAllButMe,
+					transferToBanker: transferToBanker
 				} satisfies MainDomainWithoutBanker);
 			})
 		)

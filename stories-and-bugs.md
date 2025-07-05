@@ -3,7 +3,7 @@
 ✅ - Done
 🔵 - In progress
 
-- 🔵 [Story] - As a user I want to be able to send money to banker
+- ✅ [Story] - As a user I want to be able to send money to banker
 - 🔵 [Story] - As a banker I want to be able to pass banker to someone else
 - 🔵 [Story] - As a banker, I want to be able to setup predefined amounts for sending money
 - 🔵 [Story] - As a banker, I want to be able to setup starting money amount

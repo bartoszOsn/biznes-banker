@@ -27,6 +27,7 @@ export function MainViewUserView() {
 						})
 					}
 					<MainViewUserViewTransferButton transferTo={'all'}/>
+					<MainViewUserViewTransferButton transferTo={'banker'}/>
 				</Grid>
 			</Stack>
 		</Flex>
