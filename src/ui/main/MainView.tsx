@@ -2,8 +2,8 @@ import { AppShell, useMantineColorScheme } from '@mantine/core';
 import { MainViewHeader } from './MainViewHeader.tsx';
 import { CircumstanceRole } from '../../domain/model/CircumstanceRole.ts';
 import { useEffect } from 'react';
-import { MainViewUserView } from './MainViewUserView.tsx';
-import { MainViewBankerView } from './MainViewBankerView.tsx';
+import { MainViewUserView } from './user/MainViewUserView.tsx';
+import { MainViewBankerView } from './banker/MainViewBankerView.tsx';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 
 export function MainView() {

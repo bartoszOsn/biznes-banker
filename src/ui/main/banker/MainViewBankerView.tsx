@@ -1,7 +1,7 @@
-import { useDomainOfType } from '../../domain/useDomainOfType.ts';
+import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
 import { Avatar, Divider, Image, Stack, Title } from '@mantine/core';
-import capitalist from '../../assets/capitalist.svg';
-import { MainViewBankerViewTransferButton } from './banker/MainViewBankerViewTransferButton.tsx';
+import capitalist from '../../../assets/capitalist.svg';
+import { MainViewBankerViewTransferButton } from './MainViewBankerViewTransferButton.tsx';
 
 export function MainViewBankerView() {
 	const domain = useDomainOfType('main');

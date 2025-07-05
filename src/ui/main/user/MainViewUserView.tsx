@@ -1,4 +1,4 @@
-import { useDomainOfType } from '../../domain/useDomainOfType.ts';
+import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
 import { Stack, Text, Title } from '@mantine/core';
 
 export function MainViewUserView() {
