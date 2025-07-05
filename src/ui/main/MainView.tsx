@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { MainViewUserView } from './user/MainViewUserView.tsx';
 import { MainViewBankerView } from './banker/MainViewBankerView.tsx';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
+import { MainViewTransactionLog } from './transaction-log/MainViewTransactionLog.tsx';
 
 export function MainView() {
 	const domain = useDomainOfType('main');
@@ -33,8 +34,8 @@ export function MainView() {
 				{ role === CircumstanceRole.USER && <MainViewUserView />}
 				{ role === CircumstanceRole.BANKER && <MainViewBankerView />}
 			</AppShell.Main>
-			<AppShell.Footer px='md' py='sm'>
-				Bartek ➜ Michał: $1000
+			<AppShell.Footer>
+				<MainViewTransactionLog />
 			</AppShell.Footer>
 		</AppShell>
 	)
