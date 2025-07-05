@@ -47,6 +47,19 @@ export function createSelectMainDomain() {
 					pushTransaction(sessionId, userId, toUserId, amount).then();
 				}
 
+				const transferToAllButMe = (amount: number) => {
+					if (amount <= 0) {
+						throw new Error('Transfer amount must be greater than zero.');
+					}
+					if (amount > balance) {
+						throw new Error('Insufficient balance for transfer.');
+					}
+
+					for (const opponent of opponents) {
+						transfer(opponent.id, amount);
+					}
+				}
+
 				if (me!.isAlsoBanker) {
 					const transferAsBanker = (toUserId: string, amount: number) => {
 						pushTransaction(sessionId, 'banker', toUserId, amount).then();
@@ -63,10 +76,11 @@ export function createSelectMainDomain() {
 							stage: 'main',
 							me: me!,
 							isBanker: true,
-							opponents: [...opponents, ...mockUsers], // Mock users for testing
+							opponents: opponents, // Mock users for testing
 							balance: balance,
 							transactions: transactions,
 							transfer: transfer,
+							transferToAllButMe: transferToAllButMe,
 							transferAsBanker: transferAsBanker,
 							transferAsBankerToAll: transferAsBankerToAll,
 							role: role,
@@ -80,10 +94,11 @@ export function createSelectMainDomain() {
 					stage: 'main',
 					me: me!,
 					isBanker: false,
-					opponents: [...opponents, ...mockUsers], // Mock users for testing
+					opponents: opponents, // Mock users for testing
 					balance: balance,
 					transactions: transactions,
-					transfer: transfer
+					transfer: transfer,
+					transferToAllButMe: transferToAllButMe
 				} satisfies MainDomainWithoutBanker);
 			})
 		)
