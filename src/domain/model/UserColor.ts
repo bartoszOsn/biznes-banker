@@ -1,3 +1,5 @@
+import type { MantineColor } from '@mantine/core';
+
 export enum UserColor {
 	RED = 'red',
 	BLUE = 'blue',
@@ -9,20 +11,43 @@ export enum UserColor {
 	BLACK = 'black',
 }
 
-export function userColorToMantine(color: UserColor, variant: 'light' | 'filled' | 'light-color' = 'filled'): string {
+export function userColorToMantine(color: UserColor): MantineColor {
 	switch (color) {
 		case UserColor.RED:
-			return `var(--mantine-color-red-${variant})`;
+			return `red`;
 		case UserColor.BLUE:
-			return `var(--mantine-color-blue-${variant})`;
+			return `blue`;
 		case UserColor.GREEN:
-			return `var(--mantine-color-green-${variant})`;
+			return `green`;
 		case UserColor.YELLOW:
-			return `var(--mantine-color-yellow-${variant})`;
+			return `yellow`;
 		case UserColor.PURPLE:
-			return `var(--mantine-color-violet-${variant})`;
+			return `purple`;
 		case UserColor.PINK:
-			return `var(--mantine-color-pink-${variant})`;
+			return `pink`;
+		case UserColor.WHITE:
+			return 'gray';
+		case UserColor.BLACK:
+			return 'dark';
+		default:
+			throw new Error(`Unknown user color: ${color}`);
+	}
+}
+
+export function userColorToMantineVar(color: UserColor): string {
+	switch (color) {
+		case UserColor.RED:
+			return `var(--mantine-color-red-filled)`;
+		case UserColor.BLUE:
+			return `var(--mantine-color-blue-filled)`;
+		case UserColor.GREEN:
+			return `var(--mantine-color-green-filled)`;
+		case UserColor.YELLOW:
+			return `var(--mantine-color-yellow-filled)`;
+		case UserColor.PURPLE:
+			return `var(--mantine-color-violet-filled)`;
+		case UserColor.PINK:
+			return `var(--mantine-color-pink-filled)`;
 		case UserColor.WHITE:
 			return 'white';
 		case UserColor.BLACK:

@@ -1,4 +1,4 @@
-import { UserColor, userColorToMantine } from '../../domain/model/UserColor.ts';
+import { UserColor, userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { useMemo } from 'react';
 import { CheckIcon, ColorSwatch, Flex, UnstyledButton } from '@mantine/core';
 
@@ -17,7 +17,7 @@ export function UserColorPicker(props: UserColorPickerProps) {
 			{
 				colorValues.map((color) => (
 					<UnstyledButton onClick={() => props.onChange?.(color)} key={color}>
-						<ColorSwatch color={userColorToMantine(color)} c={color === 'white' ? 'var(--mantine-color-gray-7)' : 'var(--mantine-color-gray-2)'} withShadow={true} style={{ cursor: 'pointer'}}>
+						<ColorSwatch color={userColorToMantineVar(color)} c={color === 'white' ? 'var(--mantine-color-gray-7)' : 'var(--mantine-color-gray-2)'} withShadow={true} style={{ cursor: 'pointer'}}>
 						{
 							props.value === color && <CheckIcon size={16} />
 						}

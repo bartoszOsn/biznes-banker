@@ -1,6 +1,6 @@
 import type { User } from '../../../domain/model/User.ts';
 import { userColorToMantine } from '../../../domain/model/UserColor.ts';
-import { Button, Grid, Modal, NumberInput, Stack } from '@mantine/core';
+import { Button, Grid, Modal, NumberInput, Stack, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
@@ -11,6 +11,8 @@ export interface MainViewUserViewTransferButtonProps {
 
 export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewTransferButtonProps) {
 	const domain = useDomainOfType('main');
+	const theme = useMantineTheme();
+	console.log(theme);
 
 	const [opened, { open, close }] = useDisclosure(false);
 	const [amount, setAmount] = useState<number | undefined>(undefined);
@@ -36,9 +38,9 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 	return (
 		<>
 			{
-				typeof transferTo === 'string' && (
+				transferTo === 'all' && (
 					<Grid.Col span={12}>
-						<Button color='gray' size='xl' w='100%' onClick={open}>
+						<Button variant={'gradient'} size='xl' w='100%' onClick={open}>
 							All of them
 						</Button>
 					</Grid.Col>

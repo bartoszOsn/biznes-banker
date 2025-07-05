@@ -3,8 +3,6 @@ import { BehaviorSubject, combineLatest, filter, map, type Observable, of, switc
 import { selectSessionUsers } from '../infrastructure/firebase/selectSessionUsers.ts';
 import { selectTransactions } from '../infrastructure/firebase/selectTransactions.ts';
 import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
-import type { User } from './model/User.ts';
-import { UserColor } from './model/UserColor.ts';
 import { CircumstanceRole } from './model/CircumstanceRole.ts';
 
 export function createSelectMainDomain() {
@@ -103,32 +101,3 @@ export function createSelectMainDomain() {
 			})
 		)
 }
-
-
-
-const mockUsers: User[] = [
-	{
-		id: 'mock1',
-		name: 'Bartek',
-		color: UserColor.GREEN,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock2',
-		name: 'Krzysztof',
-		color: UserColor.YELLOW,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock3',
-		name: 'Janusz',
-		color: UserColor.RED,
-		isAlsoBanker: false
-	},
-	{
-		id: 'mock4',
-		name: 'Marek',
-		color: UserColor.BLUE,
-		isAlsoBanker: false
-	}
-]

@@ -40,8 +40,8 @@ export function MainViewBankerViewTransferButton({ transferTo }: MainViewBankerV
 	return (
 		<>
 			{
-				typeof transferTo === 'string' && (
-					<Button color='gray' size='xl' onClick={open}>
+				transferTo === 'all' && (
+					<Button variant='gradient' size='xl' onClick={open}>
 						All of them
 					</Button>
 				)
