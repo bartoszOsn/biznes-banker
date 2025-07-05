@@ -2,6 +2,7 @@ import type { Transaction } from '../../../domain/model/Transaction.ts';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
 import { Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { Money } from '../../util/Money.tsx';
 
 const NEW_TRANSACTION_TIME_THRESHOLD = 30 * 1000; // 30 seconds;
 
@@ -30,7 +31,7 @@ export function MainViewTransactionLogTransaction({ transaction }: MainViewTrans
 	return (
 		<Text>
 			<Text inline inherit component='span' c={color} style={{ fontWeight: 'bold' }}>[{time}] </Text>
-			<Text inline inherit component='span'>{fromUserName} ➜ {toUserName}: ${transaction.amount}</Text>
+			<Text inline inherit component='span'>{fromUserName} ➜ {toUserName}: <Money amount={transaction.amount} /></Text>
 		</Text>
 	);
 }
