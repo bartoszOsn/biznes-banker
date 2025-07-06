@@ -5,7 +5,7 @@
 
 - ✅ [Story] - As a user I want to be able to send money to banker
 - ✅ [Story] - As a banker I want to be able to pass banker to someone else
-- 🔵 [Bug] - On login, black user is seen as opacity
+- ✅ [Bug] - On login, black user is seen as opacity
 - 🔵 [Story] - As a banker, I want to be able to setup predefined amounts for sending money
 - 🔵 [Story] - As a banker, I want to be able to setup starting money amount
 - 🔵 [Story] - As a user I want to have a sound notification when I receive money

@@ -3,7 +3,7 @@ import { ActionIcon, Box, Button, Card, ColorSwatch, CopyButton, Group, Stack, T
 import dollarGrid from '../../assets/dollar-grid.webp';
 import { IconCheck, IconCopy, IconCurrencyDollar } from '@tabler/icons-react';
 import type { User } from '../../domain/model/User.ts';
-import { userColorToMantine } from '../../domain/model/UserColor.ts';
+import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { useCallback } from 'react';
 import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
 
@@ -69,7 +69,7 @@ export function WaitForUsersView() {
 function UserIndicator(props: { user: User, isMe: boolean }) {
 	return (
 		<Group>
-			<ColorSwatch size={props.isMe ? 32 : 28} color={userColorToMantine(props.user.color)}>
+			<ColorSwatch size={props.isMe ? 32 : 28} color={userColorToMantineVar(props.user.color)}>
 				{
 					props.user.isAlsoBanker && <IconCurrencyDollar size={18} color={'white'} />
 				}
