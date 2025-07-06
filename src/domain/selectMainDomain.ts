@@ -4,6 +4,7 @@ import { selectSessionUsers } from '../infrastructure/firebase/selectSessionUser
 import { selectTransactions } from '../infrastructure/firebase/selectTransactions.ts';
 import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
 import { CircumstanceRole } from './model/CircumstanceRole.ts';
+import { pushBankerId } from '../infrastructure/firebase/pushBankerId.ts';
 
 export function createSelectMainDomain() {
 	const currentRole$ = new BehaviorSubject(CircumstanceRole.USER);
@@ -80,12 +81,20 @@ export function createSelectMainDomain() {
 						}
 					}
 
+					const changeBankerTo = (userId: string) => {
+						if (userId === me!.id) {
+							throw new Error('Cannot change banker to yourself.');
+						}
+
+						pushBankerId(sessionId, userId).then();
+					}
+
 					return currentRole$
 						.pipe(map(role => ({
 							stage: 'main',
 							me: me!,
 							isBanker: true,
-							opponents: opponents, // Mock users for testing
+							opponents: opponents,
 							balance: balance,
 							transactions: transactions,
 							transfer: transfer,
@@ -93,6 +102,7 @@ export function createSelectMainDomain() {
 							transferToBanker: transferToBanker,
 							transferAsBanker: transferAsBanker,
 							transferAsBankerToAll: transferAsBankerToAll,
+							changeBankerTo: changeBankerTo,
 							role: role,
 							setRole: (role: CircumstanceRole) => {
 								currentRole$.next(role);
@@ -104,7 +114,7 @@ export function createSelectMainDomain() {
 					stage: 'main',
 					me: me!,
 					isBanker: false,
-					opponents: opponents, // Mock users for testing
+					opponents: opponents,
 					balance: balance,
 					transactions: transactions,
 					transfer: transfer,

@@ -3,6 +3,7 @@ import { MantineProvider } from '@mantine/core';
 import { DomainProvider } from '../domain/DomainProvider.tsx';
 import { AppRouter } from '../ui/AppRouter.tsx';
 import { createNoopColorSchemeManager } from '../util/createNoopColorSchemeManager.ts';
+import { ModalsProvider } from '@mantine/modals';
 
 const colorSchemeManager = createNoopColorSchemeManager();
 
@@ -11,7 +12,9 @@ function App() {
 		<>
 			<MantineProvider colorSchemeManager={colorSchemeManager}>
 				<DomainProvider>
-					<AppRouter />
+					<ModalsProvider>
+						<AppRouter />
+					</ModalsProvider>
 				</DomainProvider>
 			</MantineProvider>
 		</>

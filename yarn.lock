@@ -1610,6 +1610,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/modals@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "@mantine/modals@npm:8.1.2"
+  peerDependencies:
+    "@mantine/core": 8.1.2
+    "@mantine/hooks": 8.1.2
+    react: ^18.x || ^19.x
+    react-dom: ^18.x || ^19.x
+  checksum: 70b75a64727bb1941296380db2393b54ff6f12cd045f2ae0e638afccfed16b13fe8b36568ddf8e4a70202b7401eb5694083814278fcfe0dab278d1b5ce705519
+  languageName: node
+  linkType: hard
+
 "@mantine/notifications@npm:^8.1.2":
   version: 8.1.2
   resolution: "@mantine/notifications@npm:8.1.2"
@@ -6093,6 +6105,7 @@ __metadata:
     "@eslint/js": ^9.29.0
     "@mantine/core": ^8.1.2
     "@mantine/hooks": ^8.1.2
+    "@mantine/modals": ^8.1.2
     "@mantine/notifications": ^8.1.2
     "@tabler/icons-react": ^3.34.0
     "@types/react": ^19.1.8

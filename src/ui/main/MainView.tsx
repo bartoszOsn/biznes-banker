@@ -1,5 +1,5 @@
 import { AppShell, useMantineColorScheme } from '@mantine/core';
-import { MainViewHeader } from './MainViewHeader.tsx';
+import { MainViewHeader } from './header/MainViewHeader.tsx';
 import { CircumstanceRole } from '../../domain/model/CircumstanceRole.ts';
 import { useEffect } from 'react';
 import { MainViewUserView } from './user/MainViewUserView.tsx';
