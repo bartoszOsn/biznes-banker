@@ -75,7 +75,7 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user4.page);
 
 		await user4.page.getByRole('textbox').fill('User 4');
-		await user4.page.locator('button:nth-child(8)').click(); // TODO: add testIds to buttons
+		await user4.page.locator('button:nth-child(3)').click(); // TODO: add testIds to buttons
 		await clickNextButton(user4.page);
 
 		await expect(user4.page.getByText('Waiting for other players')).toBeVisible();
