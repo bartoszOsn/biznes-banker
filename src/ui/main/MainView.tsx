@@ -6,9 +6,12 @@ import { MainViewUserView } from './user/MainViewUserView.tsx';
 import { MainViewBankerView } from './banker/MainViewBankerView.tsx';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 import { MainViewTransactionLog } from './transaction-log/MainViewTransactionLog.tsx';
+import { useWakeLock } from '../util/useWakeLock.ts';
 
 export function MainView() {
 	const domain = useDomainOfType('main');
+	useWakeLock();
+
 	const role = 'role' in domain ? domain.role : CircumstanceRole.USER
 
 	const { setColorScheme } = useMantineColorScheme();
