@@ -9,14 +9,14 @@ export interface MainViewBankerViewTransferButtonProps {
 	transferTo: 'all' | User;
 }
 
-export function MainViewBankerViewTransferButton({ transferTo }: MainViewBankerViewTransferButtonProps) {
+export function MainViewBankerViewTransferButton({transferTo}: MainViewBankerViewTransferButtonProps) {
 	const domain = useDomainOfType('main');
 
 	if (!domain.isBanker) {
 		throw new Error('MainViewBankerViewTransferButton can only be used by the banker.');
 	}
 
-	const [opened, { open, close }] = useDisclosure(false);
+	const [opened, {open, close}] = useDisclosure(false);
 	const [amount, setAmount] = useState<number | undefined>(undefined);
 
 	const onClose = useCallback(() => {
@@ -41,22 +41,25 @@ export function MainViewBankerViewTransferButton({ transferTo }: MainViewBankerV
 		<>
 			{
 				transferTo === 'all' && (
-					<Button variant='gradient' size='xl' onClick={open}>
+					<Button variant="gradient" size="xl" onClick={open}>
 						All of them
 					</Button>
 				)
 			}
 			{
 				typeof transferTo !== 'string' && (
-					<Button color={userColorToMantine(transferTo.color)} size='xl' onClick={open}>
+					<Button color={userColorToMantine(transferTo.color)} size="xl" onClick={open}>
 						{transferTo.name}
 					</Button>
 				)
 			}
 
 			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
-				<Stack gap='lg'>
-					<NumberInput data-autofocus size='lg' prefix='$' thousandSeparator value={amount} onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))} />
+				<Stack gap="lg">
+					<form onSubmit={(e) => {transfer(); e.preventDefault();}}>
+						<NumberInput data-autofocus size="lg" prefix="$" thousandSeparator value={amount}
+									 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+					</form>
 					<Button onClick={transfer}>Transfer</Button>
 				</Stack>
 			</Modal>

@@ -69,6 +69,7 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 
 			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
 				<Stack gap='lg'>
+					<form onSubmit={(e) => {transfer(); e.preventDefault();}}>
 					<NumberInput data-autofocus
 								 size="lg"
 								 prefix="$"
@@ -80,6 +81,7 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 										: undefined
 								}
 								 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+					</form>
 					<Button onClick={transfer}>Transfer</Button>
 				</Stack>
 			</Modal>
