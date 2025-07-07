@@ -3,10 +3,15 @@ import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
 import { MainViewTransactionLogTransaction } from './MainViewTransactionLogTransaction.tsx';
 import { useDisclosure } from '@mantine/hooks';
 import { MainViewTransactionIcon } from './MainViewTransactionIcon.tsx';
+import type { MainDomain } from '../../../domain/Domain.ts';
+import { useEffect } from 'react';
+import { playMoneySound } from '../../util/playMoneySound.ts';
 
 export function MainViewTransactionLog() {
 	const domain = useDomainOfType('main');
 	const [opened, { open, close }] = useDisclosure(false);
+
+	useSoundEffectOnMoney(domain);
 
 	return (
 		<>
@@ -37,4 +42,14 @@ export function MainViewTransactionLog() {
 			</Modal>
 		</>
 	)
+}
+
+function useSoundEffectOnMoney(domain: MainDomain): void {
+	const lastTransaction = domain.transactions[domain.transactions.length - 1];
+
+	useEffect(() => {
+		if (lastTransaction && lastTransaction.toUserId === domain.me.id) {
+			playMoneySound();
+		}
+	}, [lastTransaction?.toUserId, lastTransaction?.timestamp, domain.me.id]);
 }

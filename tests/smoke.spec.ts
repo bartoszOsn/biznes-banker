@@ -85,4 +85,13 @@ test('Smoke test', async ({ users }) => {
 		await expect(user4.page.getByText('User 3')).toBeVisible();
 		await expect(user4.page.getByText('User 4')).toBeVisible();
 	});
+
+	await test.step('Start game', async () => {
+		await user1.page.getByRole('button', { name: 'Play' }).click();
+
+		await expect(user1.page.locator('.mantine-AppShell-root')).toBeVisible();
+		await expect(user2.page.locator('.mantine-AppShell-root')).toBeVisible();
+		await expect(user3.page.locator('.mantine-AppShell-root')).toBeVisible();
+		await expect(user4.page.locator('.mantine-AppShell-root')).toBeVisible();
+	})
 })
