@@ -1,10 +1,11 @@
 import type { User } from '../../../domain/model/User.ts';
 import { userColorToMantine } from '../../../domain/model/UserColor.ts';
-import { Button, Grid, Modal, NumberInput, Stack } from '@mantine/core';
+import { Button, Grid, Modal, NumberInput, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
 import { IconBuildingBank } from '@tabler/icons-react';
+import { Money } from '../../util/Money.tsx';
 
 export interface MainViewUserViewTransferButtonProps {
 	transferTo: 'all' | 'banker' | User;
@@ -68,7 +69,17 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 
 			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
 				<Stack gap='lg'>
-					<NumberInput data-autofocus size='lg' prefix='$' thousandSeparator value={amount} onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))} />
+					<NumberInput data-autofocus
+								 size="lg"
+								 prefix="$"
+								 thousandSeparator
+								 value={amount}
+								 error={
+									amount && amount > domain.balance
+										? <Text>You don't have enough money. Missing <Money amount={amount - domain.balance} /></Text>
+										: undefined
+								}
+								 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
 					<Button onClick={transfer}>Transfer</Button>
 				</Stack>
 			</Modal>
