@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { MainViewTransactionIcon } from './MainViewTransactionIcon.tsx';
 import type { MainDomain } from '../../../domain/Domain.ts';
 import { useEffect } from 'react';
-import { playMoneySound } from '../../util/playMoneySound.ts';
+import { useSoundPlayer } from '../../util/SoundPlayerProvider.tsx';
 
 export function MainViewTransactionLog() {
 	const domain = useDomainOfType('main');
@@ -45,6 +45,7 @@ export function MainViewTransactionLog() {
 }
 
 function useSoundEffectOnMoney(domain: MainDomain): void {
+	const { playMoneySound } = useSoundPlayer();
 	const lastTransaction = domain.transactions[domain.transactions.length - 1];
 
 	useEffect(() => {

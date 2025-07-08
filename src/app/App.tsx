@@ -4,6 +4,7 @@ import { DomainProvider } from '../domain/DomainProvider.tsx';
 import { AppRouter } from '../ui/AppRouter.tsx';
 import { createNoopColorSchemeManager } from '../util/createNoopColorSchemeManager.ts';
 import { ModalsProvider } from '@mantine/modals';
+import { SoundPlayerProvider } from '../ui/util/SoundPlayerProvider.tsx';
 
 const colorSchemeManager = createNoopColorSchemeManager();
 
@@ -13,7 +14,9 @@ function App() {
 			<MantineProvider colorSchemeManager={colorSchemeManager}>
 				<DomainProvider>
 					<ModalsProvider>
-						<AppRouter />
+						<SoundPlayerProvider>
+							<AppRouter />
+						</SoundPlayerProvider>
 					</ModalsProvider>
 				</DomainProvider>
 			</MantineProvider>
