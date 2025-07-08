@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useContext, useRef, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import moneySrc from '../../assets/money.mp3';
 import { ActionIcon, Affix } from '@mantine/core';
 import { IconVolumeOff } from '@tabler/icons-react';
@@ -38,6 +38,17 @@ export function SoundPlayerProvider({ children }: { children: ReactNode}): React
 		unmute,
 		playMoneySound
 	};
+
+	useEffect(() => {
+		if (muted) {
+			const handler = () => {
+				unmute().then();
+				document.body.removeEventListener('click', handler);
+			}
+
+			document.body.addEventListener('click', handler);
+		}
+	}, [muted, unmute]);
 
 	return (
 		<SoundPlayerContext.Provider value={player}>
