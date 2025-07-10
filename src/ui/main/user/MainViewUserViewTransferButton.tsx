@@ -78,7 +78,7 @@ export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTra
 				)
 			}
 
-			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
+			<Modal opened={opened} onClose={onClose} title={`Transfer to ${transferTo === 'all' ? 'everyone' : transferTo === 'banker'? 'Banker' : transferTo.name}`}>
 				<Stack gap="lg">
 					<form onSubmit={(e) => {
 						transfer();
