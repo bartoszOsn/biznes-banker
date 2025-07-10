@@ -20,3 +20,4 @@
 - 🔵 [Story] - As a banker I want to see bank balance, to better catch up cheat attempts
 - 🔵 [Story] - As a user I want to see who is online
 - 🔵 [Story] - As a user I want better visuals
+- 🔵 [Story] - Add rules to realtime database
