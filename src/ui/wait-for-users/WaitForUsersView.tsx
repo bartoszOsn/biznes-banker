@@ -12,9 +12,11 @@ export function WaitForUsersView() {
 	const domain = useDomainOfType('withoutStarting');
 
 	const onPlay = useCallback(() => {
-		fireMoneyConfetti();
-		domain.startGame();
-	}, [domain.startGame]);
+		if (domain.asBanker) {
+			fireMoneyConfetti();
+			domain.asBanker.startGame();
+		}
+	}, [domain.asBanker]);
 
 	return (
 		<Box style={{
@@ -60,10 +62,14 @@ export function WaitForUsersView() {
 							}
 						</Stack>
 					</Card>
-					<Stack gap='xs' align='center'>
-						<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onPlay}>Play</Button>
-						<SelectMoneyPresetsButton />
-					</Stack>
+					{
+						domain.asBanker && (
+							<Stack gap='xs' align='center'>
+								<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onPlay}>Play</Button>
+								<SelectMoneyPresetsButton />
+							</Stack>
+						)
+					}
 				</Stack>
 			</Box>
 		</Box>

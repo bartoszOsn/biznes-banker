@@ -5,7 +5,7 @@ import { getRef } from './util/getRef.ts';
 import { db } from './fb.ts';
 
 export function selectPresets(sessionId: string): Observable<Preset[]> {
-	return selectDbValue(getRef(db, sessionId, 'startingMoney'))
+	return selectDbValue(getRef(db, sessionId, 'presets'))
 		.pipe(
 			map(presetsObj => {
 				if (!presetsObj) {
