@@ -15,15 +15,14 @@ type Primitive = string | number | boolean | symbol | null | undefined;
 type Path<T> = T extends Primitive
 	? []
 	: {
-		[K in keyof T]: [K] | [K, ...Path<T[K]>];
+		[K in keyof T]-?: [K] | [K, ...Path<NonNullable<T[K]>>];
 	}[keyof T];
 
 type PathValue<T, P extends Array<string | number | symbol>> =
 	P extends [infer K, ...infer Rest]
 		? K extends keyof T
 			? Rest extends Array<string | number | symbol>
-				? PathValue<T[K], Rest>
+				? PathValue<NonNullable<T[K]>, Rest>
 				: never
 			: never
 		: T;
-
