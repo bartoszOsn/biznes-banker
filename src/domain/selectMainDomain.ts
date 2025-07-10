@@ -54,10 +54,11 @@ export function createSelectMainDomain() {
 				}
 
 				const transferToAllButMe = (amount: number) => {
+					const wholeAmount = amount * opponents.length;
 					if (amount <= 0) {
 						throw new Error('Transfer amount must be greater than zero.');
 					}
-					if (amount > balance) {
+					if (wholeAmount > balance) {
 						throw new Error('Insufficient balance for transfer.');
 					}
 

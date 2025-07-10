@@ -21,6 +21,13 @@ export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTra
 		close();
 		setAmount(undefined);
 	}, [close]);
+	
+	const getRealAmount = useCallback((amount: number) => {
+		if (transferTo === 'all') {
+			return amount * domain.opponents.length;
+		}
+		return amount;
+	}, [domain.balance, domain.opponents.length, transferTo]);
 
 	const transfer = useCallback((customAmount?: number) => {
 		if (customAmount === undefined) {
@@ -84,8 +91,8 @@ export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTra
 										 thousandSeparator
 										 value={amount}
 										 error={
-											 amount && amount > domain.balance
-												 ? <Text>You don't have enough money. Missing <Money amount={amount - domain.balance}/></Text>
+											 amount && getRealAmount(amount) > domain.balance
+												 ? <Text>You don't have enough money. Missing <Money amount={getRealAmount(amount) - domain.balance}/></Text>
 												 : undefined
 										 }
 										 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
@@ -93,7 +100,7 @@ export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTra
 								{
 									domain.presets.map((preset, index) => (
 										<Button key={index} variant="light" size="lg" onClick={() => transfer(preset.amount)}
-												disabled={preset.amount > domain.balance}>
+												disabled={getRealAmount(preset.amount) > domain.balance}>
 											<Stack gap="0" align="start">
 												<Text size="xs" c="gray">{preset.name}</Text>
 												<Text size="sm" fw="bold"><Money amount={preset.amount}/></Text>
@@ -104,7 +111,7 @@ export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTra
 							</Group>
 						</Stack>
 					</form>
-					<Button onClick={() => transfer()}>Transfer</Button>
+					<Button onClick={() => transfer()} disabled={!amount || getRealAmount(amount) > domain.balance}>Transfer</Button>
 				</Stack>
 			</Modal>
 		</>
