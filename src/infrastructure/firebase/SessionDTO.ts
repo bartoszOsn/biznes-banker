@@ -9,7 +9,7 @@ export interface SessionDTO {
 			name: string;
 			color: UserColor;
 		};
-	},
+	};
 	operations: {
 		[key: string]: {
 			moneyFromPlayerId: 'banker' | string;

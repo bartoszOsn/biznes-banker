@@ -6,6 +6,7 @@ import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { useCallback } from 'react';
 import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
+import { SelectMoneyPresetsButton } from './SelectMoneyPresetsButton.tsx';
 
 export function WaitForUsersView() {
 	const domain = useDomainOfType('withoutStarting');
@@ -45,8 +46,8 @@ export function WaitForUsersView() {
 							</CopyButton>
 						)}/>
 					</Card>
-					<Card>
-						<Stack gap={8}>
+					<Card w='100%'>
+						<Stack gap={8} w='100%' align='center'>
 							{
 								domain.me && (
 									<UserIndicator user={domain.me} isMe={true} />
@@ -59,7 +60,10 @@ export function WaitForUsersView() {
 							}
 						</Stack>
 					</Card>
-					<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onPlay}>Play</Button>
+					<Stack gap='xs' align='center'>
+						<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onPlay}>Play</Button>
+						<SelectMoneyPresetsButton />
+					</Stack>
 				</Stack>
 			</Box>
 		</Box>

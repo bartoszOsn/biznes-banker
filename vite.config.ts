@@ -15,6 +15,11 @@ export default defineConfig(({ command, mode }) => {
 
 	return ({
 		plugins: [react()],
+		resolve: {
+			alias: {
+				'@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
+			}
+		},
 		define: {
 			__EMULATOR_URL__: JSON.stringify(emulatorUrl)
 		}
