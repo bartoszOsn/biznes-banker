@@ -2,6 +2,7 @@ import type { User, UserWithBanker, UserWithoutBanker } from './model/User.ts';
 import type { Transaction } from './model/Transaction.ts';
 import type { UserColor } from './model/UserColor.ts';
 import type { CircumstanceRole } from './model/CircumstanceRole.ts';
+import type { Preset } from './model/Preset.ts';
 
 export type Domain = DomainWithoutSession
 	| DomainWithoutUser
@@ -23,7 +24,13 @@ export interface DomainWithoutStarting {
 	me: User;
 	opponents: User[];
 	joinLink: string;
-	startGame: () => void;
+	asBanker: null | {
+		startGame: () => void;
+		startingMoney: number | null;
+		presets: Preset[],
+		setStartingMoney: (amount: number | null) => void;
+		setPresets: (presets: Preset[]) => void;
+	}
 }
 
 export interface BaseMainDomain {

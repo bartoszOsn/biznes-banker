@@ -1,7 +1,11 @@
 import type { DomainWithoutStarting } from './Domain.ts';
-import { filter, map, type Observable } from 'rxjs';
+import { filter, map, type Observable, switchMap, combineLatest } from 'rxjs';
 import { selectSessionUsers } from '../infrastructure/firebase/selectSessionUsers.ts';
 import { pushSessionStarted } from '../infrastructure/firebase/pushSessionStarted.ts';
+import { selectStartingMoney } from '../infrastructure/firebase/selectStartingMoney.ts';
+import { selectPresets } from '../infrastructure/firebase/selectPresets.ts';
+import { pushStartingMoney } from '../infrastructure/firebase/pushStartingMoney.ts';
+import { pushPresets } from '../infrastructure/firebase/pushPresets.ts';
 
 export function selectDomainWithoutStarting(sessionId: string, userId: string): Observable<DomainWithoutStarting> {
 	return selectSessionUsers(sessionId)
@@ -13,14 +17,38 @@ export function selectDomainWithoutStarting(sessionId: string, userId: string): 
 				return [me, opponents] as const;
 			}),
 			filter(([me]) => me !== undefined),
-			map(([me, opponents]) => ({
-				stage: 'withoutStarting',
-				me: me!,
-				opponents,
-				joinLink: location.href,
-				startGame: () => {
-					pushSessionStarted(sessionId, true).then();
-				}
-			}))
+			switchMap(([me, opponents]) => {
+				return combineLatest([
+					selectStartingMoney(sessionId),
+					selectPresets(sessionId)
+				])
+					.pipe(
+						map(([startingMoney, presets]) => [me!, opponents, startingMoney, presets] as const)
+					)
+			}),
+			map(([me, opponents, startingMoney, presets]) => {
+
+				const asBanker: DomainWithoutStarting['asBanker'] = me.isAlsoBanker ? {
+					startGame: () => {
+						pushSessionStarted(sessionId, true).then();
+					},
+					startingMoney: startingMoney,
+					presets: presets,
+					setStartingMoney: (amount) => {
+						pushStartingMoney(sessionId, amount).then();
+					},
+					setPresets: (presets) => {
+						pushPresets(sessionId, presets).then();
+					}
+				} : null;
+
+				return {
+					stage: 'withoutStarting',
+					me: me,
+					opponents,
+					joinLink: location.href,
+					asBanker
+				};
+			})
 		);
 }

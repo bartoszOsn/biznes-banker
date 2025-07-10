@@ -18,4 +18,11 @@ export interface SessionDTO {
 			timestamp: number;
 		}
 	};
+	startingMoney?: number;
+	presets?: {
+		[key: string]: {
+			name: string;
+			amount: number;
+		}
+	}
 }
