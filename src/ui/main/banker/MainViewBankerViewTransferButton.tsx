@@ -1,9 +1,10 @@
 import type { User } from '../../../domain/model/User.ts';
 import { userColorToMantine } from '../../../domain/model/UserColor.ts';
-import { Button, Modal, NumberInput, Stack } from '@mantine/core';
+import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
+import { Money } from '../../util/Money.tsx';
 
 export interface MainViewBankerViewTransferButtonProps {
 	transferTo: 'all' | User;
@@ -24,15 +25,19 @@ export function MainViewBankerViewTransferButton({transferTo}: MainViewBankerVie
 		setAmount(undefined);
 	}, [close]);
 
-	const transfer = useCallback(() => {
-		if (amount === undefined || amount <= 0) {
+	const transfer = useCallback((customAmount?: number) => {
+		if (customAmount === undefined) {
+			customAmount = amount;
+		}
+
+		if (customAmount === undefined || customAmount <= 0) {
 			return;
 		}
 
 		if (transferTo === 'all') {
-			domain.transferAsBankerToAll(amount);
+			domain.transferAsBankerToAll(customAmount);
 		} else {
-			domain.transferAsBanker(transferTo.id, amount);
+			domain.transferAsBanker(transferTo.id, customAmount);
 		}
 		onClose();
 	}, [domain, onClose, amount, transferTo]);
@@ -57,10 +62,24 @@ export function MainViewBankerViewTransferButton({transferTo}: MainViewBankerVie
 			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
 				<Stack gap="lg">
 					<form onSubmit={(e) => {transfer(); e.preventDefault();}}>
+						<Stack gap="md">
 						<NumberInput data-autofocus size="lg" prefix="$" thousandSeparator value={amount}
 									 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+							<Group gap="xs">
+								{
+									domain.presets.map((preset, index) => (
+										<Button key={index} variant="light" size="lg" onClick={() => transfer(preset.amount)}>
+											<Stack gap="0" align="start">
+												<Text size="xs" c="gray">{preset.name}</Text>
+												<Text size="sm" fw="bold"><Money amount={preset.amount}/></Text>
+											</Stack>
+										</Button>
+									))
+								}
+							</Group>
+						</Stack>
 					</form>
-					<Button onClick={transfer}>Transfer</Button>
+					<Button onClick={() => transfer()}>Transfer</Button>
 				</Stack>
 			</Modal>
 		</>

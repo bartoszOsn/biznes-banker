@@ -5,6 +5,7 @@ import { selectTransactions } from '../infrastructure/firebase/selectTransaction
 import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
 import { CircumstanceRole } from './model/CircumstanceRole.ts';
 import { pushBankerId } from '../infrastructure/firebase/pushBankerId.ts';
+import { selectPresets } from '../infrastructure/firebase/selectPresets.ts';
 
 export function createSelectMainDomain() {
 	const currentRole$ = new BehaviorSubject(CircumstanceRole.USER);
@@ -22,6 +23,12 @@ export function createSelectMainDomain() {
 			}),
 			filter(([me]) => me !== undefined),
 			switchMap(([me, opponents, transactions]) => {
+				return selectPresets(sessionId)
+					.pipe(
+						map((presets) => [me!, opponents, transactions, presets] as const)
+					)
+			}),
+			switchMap(([me, opponents, transactions, presets]) => {
 				const balance = transactions.reduce((acc, tr) => {
 					if (tr.fromUserId === userId) {
 						return acc - tr.amount;
@@ -106,7 +113,8 @@ export function createSelectMainDomain() {
 							role: role,
 							setRole: (role: CircumstanceRole) => {
 								currentRole$.next(role);
-							}
+							},
+							presets
 						} satisfies MainDomainWithBanker)))
 				}
 
@@ -119,7 +127,8 @@ export function createSelectMainDomain() {
 					transactions: transactions,
 					transfer: transfer,
 					transferToAllButMe: transferToAllButMe,
-					transferToBanker: transferToBanker
+					transferToBanker: transferToBanker,
+					presets
 				} satisfies MainDomainWithoutBanker);
 			})
 		)

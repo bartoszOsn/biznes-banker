@@ -1,6 +1,6 @@
 import type { User } from '../../../domain/model/User.ts';
 import { userColorToMantine } from '../../../domain/model/UserColor.ts';
-import { Button, Grid, Modal, NumberInput, Stack, Text } from '@mantine/core';
+import { Button, Grid, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
@@ -11,10 +11,10 @@ export interface MainViewUserViewTransferButtonProps {
 	transferTo: 'all' | 'banker' | User;
 }
 
-export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewTransferButtonProps) {
+export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTransferButtonProps) {
 	const domain = useDomainOfType('main');
 
-	const [opened, { open, close }] = useDisclosure(false);
+	const [opened, {open, close}] = useDisclosure(false);
 	const [amount, setAmount] = useState<number | undefined>(undefined);
 
 	const onClose = useCallback(() => {
@@ -22,17 +22,21 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 		setAmount(undefined);
 	}, [close]);
 
-	const transfer = useCallback(() => {
-		if (amount === undefined || amount <= 0) {
+	const transfer = useCallback((customAmount?: number) => {
+		if (customAmount === undefined) {
+			customAmount = amount;
+		}
+
+		if (customAmount === undefined || customAmount <= 0) {
 			return;
 		}
 
 		if (transferTo === 'all') {
-			domain.transferToAllButMe(amount);
-		}  else if (transferTo === 'banker') {
-			domain.transferToBanker(amount);
+			domain.transferToAllButMe(customAmount);
+		} else if (transferTo === 'banker') {
+			domain.transferToBanker(customAmount);
 		} else {
-			domain.transfer(transferTo.id, amount);
+			domain.transfer(transferTo.id, customAmount);
 		}
 		onClose();
 	}, [domain, onClose, amount, transferTo]);
@@ -42,7 +46,7 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 			{
 				transferTo === 'all' && (
 					<Grid.Col span={12}>
-						<Button variant={'gradient'} size='xl' w='100%' onClick={open}>
+						<Button variant={'gradient'} size="xl" w="100%" onClick={open}>
 							All of them
 						</Button>
 					</Grid.Col>
@@ -51,7 +55,7 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 			{
 				transferTo === 'banker' && (
 					<Grid.Col span={12}>
-						<Button leftSection={<IconBuildingBank />} variant={'gradient'} gradient={{ from: 'dark', to: 'gray' }} size='xl' w='100%' onClick={open}>
+						<Button leftSection={<IconBuildingBank/>} variant={'gradient'} gradient={{from: 'dark', to: 'gray'}} size="xl" w="100%" onClick={open}>
 							Banker
 						</Button>
 					</Grid.Col>
@@ -60,7 +64,7 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 			{
 				typeof transferTo !== 'string' && (
 					<Grid.Col span={6}>
-						<Button color={userColorToMantine(transferTo.color)} size='xl' w='100%' onClick={open}>
+						<Button color={userColorToMantine(transferTo.color)} size="xl" w="100%" onClick={open}>
 							{transferTo.name}
 						</Button>
 					</Grid.Col>
@@ -68,21 +72,39 @@ export function MainViewUserViewTransferButton({ transferTo }: MainViewUserViewT
 			}
 
 			<Modal opened={opened} onClose={onClose} title={`Transfer to ${typeof transferTo === 'string' ? 'everyone' : transferTo.name}`}>
-				<Stack gap='lg'>
-					<form onSubmit={(e) => {transfer(); e.preventDefault();}}>
-					<NumberInput data-autofocus
-								 size="lg"
-								 prefix="$"
-								 thousandSeparator
-								 value={amount}
-								 error={
-									amount && amount > domain.balance
-										? <Text>You don't have enough money. Missing <Money amount={amount - domain.balance} /></Text>
-										: undefined
+				<Stack gap="lg">
+					<form onSubmit={(e) => {
+						transfer();
+						e.preventDefault();
+					}}>
+						<Stack gap="md">
+							<NumberInput data-autofocus
+										 size="lg"
+										 prefix="$"
+										 thousandSeparator
+										 value={amount}
+										 error={
+											 amount && amount > domain.balance
+												 ? <Text>You don't have enough money. Missing <Money amount={amount - domain.balance}/></Text>
+												 : undefined
+										 }
+										 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+							<Group gap="xs">
+								{
+									domain.presets.map((preset, index) => (
+										<Button key={index} variant="light" size="lg" onClick={() => transfer(preset.amount)}
+												disabled={preset.amount > domain.balance}>
+											<Stack gap="0" align="start">
+												<Text size="xs" c="gray">{preset.name}</Text>
+												<Text size="sm" fw="bold"><Money amount={preset.amount}/></Text>
+											</Stack>
+										</Button>
+									))
 								}
-								 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+							</Group>
+						</Stack>
 					</form>
-					<Button onClick={transfer}>Transfer</Button>
+					<Button onClick={() => transfer()}>Transfer</Button>
 				</Stack>
 			</Modal>
 		</>

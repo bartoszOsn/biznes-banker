@@ -6,6 +6,8 @@ import { selectStartingMoney } from '../infrastructure/firebase/selectStartingMo
 import { selectPresets } from '../infrastructure/firebase/selectPresets.ts';
 import { pushStartingMoney } from '../infrastructure/firebase/pushStartingMoney.ts';
 import { pushPresets } from '../infrastructure/firebase/pushPresets.ts';
+import { selectStartingMoneyOnce } from '../infrastructure/firebase/selectStartingMoneyOnce.ts';
+import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
 
 export function selectDomainWithoutStarting(sessionId: string, userId: string): Observable<DomainWithoutStarting> {
 	return selectSessionUsers(sessionId)
@@ -30,7 +32,15 @@ export function selectDomainWithoutStarting(sessionId: string, userId: string): 
 
 				const asBanker: DomainWithoutStarting['asBanker'] = me.isAlsoBanker ? {
 					startGame: () => {
-						pushSessionStarted(sessionId, true).then();
+						pushSessionStarted(sessionId, true)
+							.then(() => selectStartingMoneyOnce(sessionId))
+							.then((startingMoney) => {
+								if (startingMoney !== null) {
+									for (const user of [me, ...opponents]) {
+										pushTransaction(sessionId, 'banker', user.id, startingMoney).then()
+									}
+								}
+							})
 					},
 					startingMoney: startingMoney,
 					presets: presets,

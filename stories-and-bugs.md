@@ -8,8 +8,10 @@
 - ✅ [Bug] - On login, black user is seen as opacity
 - ✅ [Story] - As a user I want to be able to know why my transaction failed (validation)
 - ✅ [Story] - As a user I want pressing enter to send money
-- 🔵 [Story] - As a banker, I want to be able to setup predefined amounts for sending money
-- 🔵 [Story] - As a banker, I want to be able to setup starting money amount
+- ✅ [Story] - As a banker, I want to be able to setup predefined amounts for sending money
+- ✅ [Story] - As a banker, I want to be able to setup starting money amount
+- 🔵 [Bug] - Transfer to everyone validates the balance only once.
+- 🔵 [Bug] - Transfer to banker shows up as "transfer to everyone" in the modal title
 - 🔵 [Story] - As a user I want to be able to hide my money amount
 - ✅ [Story] - As a user I want to have a sound notification when I receive money
 - 🔵 [Bug] - When money is sent to all users, only last user has sound notification.

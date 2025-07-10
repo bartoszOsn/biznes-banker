@@ -41,6 +41,7 @@ export interface BaseMainDomain {
 	transfer: (toUserId: string, amount: number) => void;
 	transferToBanker: (amount: number) => void;
 	transferToAllButMe: (amount: number) => void;
+	presets: Preset[];
 }
 
 export interface MainDomainWithBanker extends BaseMainDomain {
