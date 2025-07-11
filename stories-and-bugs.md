@@ -18,6 +18,7 @@
   - Might be good oportunity to store transfer to all users as one transaction in database.
 - ✅ [Story] - As a user I want my screen to not lock when I use the app
 - 🔵 [Story] - As a user I want to be able to add optional description to the transaction
+- 🔵 [Story] - As a user I want to be able to view newest transactions first
 - 🔵 [Story] - As a user I want to view last transaction of mine below balance
 - 🔵 [Story] - As a banker I want to see bank balance, to better catch up cheat attempts
 - 🔵 [Story] - As a user I want to see who is online

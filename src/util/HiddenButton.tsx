@@ -3,8 +3,8 @@ import type { ComponentProps, ReactNode } from 'react';
 import { IconEyeOff } from '@tabler/icons-react';
 
 export function HiddenButton<C = 'button'>(props: Omit<ComponentProps<typeof UnstyledButton<C>>, 'children'>): ReactNode {
-	const c1 = 'var(--mantine-color-blue-1)';
-	const c2 = 'var(--mantine-color-blue-2)';
+	const c1 = 'var(--mantine-color-gray-1)';
+	const c2 = 'var(--mantine-color-gray-2)';
 
 	const styleObj = {
 		...props.style,
