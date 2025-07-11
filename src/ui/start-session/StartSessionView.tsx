@@ -35,7 +35,7 @@ export function StartSessionView() {
 						<Image src={capitalist} alt={'Capitalist Logo'}/>
 					</Avatar>
 					<Title c="white" style={{textTransform: 'uppercase'}}>E-banking</Title>
-					<Text c="white" style={{textAlign: 'center'}}>Electronic bank for the monopoly game</Text>
+					<Text c="white" style={{textAlign: 'center'}}>Electronic bank for the games like monopoly</Text>
 					<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onStartSessionClick}>💲Start session</Button>
 				</Stack>
 			</Box>
