@@ -27,3 +27,4 @@
 - 🔵 [Bug] -Very long usernames are not displayed correctly
 - 🔵 [Story] - As a user I want to be able to change my username and color during the game
 - 🔵 [Story] - As a user I want to not be able to set my password to "Banker"
+- 🔵 [Bug] - When adding presets in preset modal, they reset when new user joins
