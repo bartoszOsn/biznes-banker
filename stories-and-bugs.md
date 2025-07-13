@@ -24,3 +24,6 @@
 - 🔵 [Story] - As a user I want to see who is online
 - 🔵 [Story] - As a user I want better visuals
 - 🔵 [Story] - Add rules to realtime database
+- 🔵 [Bug] -Very long usernames are not displayed correctly
+- 🔵 [Story] - As a user I want to be able to change my username and color during the game
+- 🔵 [Story] - As a user I want to not be able to set my password to "Banker"
