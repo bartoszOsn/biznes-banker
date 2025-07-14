@@ -10,13 +10,13 @@ export function MainViewHeaderMenuChangeBankerItem() {
 	const domain = useDomainOfType('main');
 
 	const transferBankerTo = useCallback((user: User) => {
-		if (!domain.isBanker) {
+		if (!domain.asBanker) {
 			return;
 		}
 
-		domain.changeBankerTo(user.id);
+		domain.asBanker.changeBankerTo(user.id);
 		close();
-	}, [domain, close]);
+	}, [domain]);
 
 	const openModal = () => {
 		const id = modals.open({
@@ -43,7 +43,7 @@ export function MainViewHeaderMenuChangeBankerItem() {
 		})
 	}
 
-	if (!domain.isBanker) {
+	if (!domain.asBanker) {
 		return null;
 	}
 

@@ -12,7 +12,7 @@ export function MainView() {
 	const domain = useDomainOfType('main');
 	useWakeLock();
 
-	const role = 'role' in domain ? domain.role : CircumstanceRole.USER
+	const role = domain.asBanker?.role ?? CircumstanceRole.USER;
 
 	const { setColorScheme } = useMantineColorScheme();
 
@@ -26,7 +26,7 @@ export function MainView() {
 		return () => {
 			setColorScheme('light');
 		}
-	}, [role]);
+	}, [role, setColorScheme]);
 
 	return (
 		<AppShell header={{ height: 60 }} footer={{ height: '50'}} padding="md">

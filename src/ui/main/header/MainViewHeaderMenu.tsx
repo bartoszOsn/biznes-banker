@@ -9,7 +9,7 @@ export function MainViewHeaderMenu() {
 
 	const items: ReactNode[] = [];
 
-	if (domain.isBanker) {
+	if (domain.asBanker) {
 		items.push(<Menu.Label>Banker</Menu.Label>);
 		items.push(
 			<MainViewHeaderMenuChangeBankerItem />

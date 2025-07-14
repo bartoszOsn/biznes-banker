@@ -1,4 +1,4 @@
-import type { User, UserWithBanker, UserWithoutBanker } from './model/User.ts';
+import type { User } from './model/User.ts';
 import type { Transaction } from './model/Transaction.ts';
 import type { UserColor } from './model/UserColor.ts';
 import type { CircumstanceRole } from './model/CircumstanceRole.ts';
@@ -33,8 +33,9 @@ export interface DomainWithoutStarting {
 	}
 }
 
-export interface BaseMainDomain {
+export interface MainDomain {
 	stage: 'main';
+	me: User;
 	opponents: User[];
 	balance: number;
 	transactions: Transaction[];
@@ -42,21 +43,11 @@ export interface BaseMainDomain {
 	transferToBanker: (amount: number) => void;
 	transferToAllButMe: (amount: number) => void;
 	presets: Preset[];
+	asBanker?: null | {
+		transferAsBanker: (toUserId: string, amount: number) => void;
+		transferAsBankerToAll: (amount: number) => void;
+		changeBankerTo: (userId: string) => void;
+		role: CircumstanceRole;
+		setRole: (role: CircumstanceRole) => void;
+	}
 }
-
-export interface MainDomainWithBanker extends BaseMainDomain {
-	me: UserWithBanker;
-	isBanker: true;
-	transferAsBanker: (toUserId: string, amount: number) => void;
-	transferAsBankerToAll: (amount: number) => void;
-	changeBankerTo: (userId: string) => void;
-	role: CircumstanceRole;
-	setRole: (role: CircumstanceRole) => void;
-}
-
-export interface MainDomainWithoutBanker extends BaseMainDomain {
-	me: UserWithoutBanker;
-	isBanker: false;
-}
-
-export type MainDomain = MainDomainWithBanker | MainDomainWithoutBanker;

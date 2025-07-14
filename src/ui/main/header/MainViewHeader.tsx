@@ -12,15 +12,15 @@ export function MainViewHeader() {
 		<Group w='100%' h='100%' justify='space-between' align='center' px='md'>
 			<HeaderUser name={domain.me.name}
 						color={userColorToMantine(domain.me.color)}
-						isSelected={!domain.isBanker || domain.role === CircumstanceRole.USER}
-						onClick={() => domain.isBanker && domain.setRole(CircumstanceRole.USER)}/>
+						isSelected={!domain.asBanker || domain.asBanker.role === CircumstanceRole.USER}
+						onClick={() => domain.asBanker && domain.asBanker.setRole(CircumstanceRole.USER)}/>
 			<Group>
 				{
-					domain.isBanker && (
+					domain.asBanker && (
 						<HeaderUser name='Banker'
 									color='gray'
-									isSelected={domain.role === CircumstanceRole.BANKER}
-									onClick={() => domain.setRole(CircumstanceRole.BANKER)}/>
+									isSelected={domain.asBanker.role === CircumstanceRole.BANKER}
+									onClick={() => domain.asBanker && domain.asBanker.setRole(CircumstanceRole.BANKER)} />
 					)
 				}
 				<MainViewHeaderMenu />

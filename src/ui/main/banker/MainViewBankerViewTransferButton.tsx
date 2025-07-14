@@ -12,15 +12,19 @@ export interface MainViewBankerViewTransferButtonProps {
 export function MainViewBankerViewTransferButton({transferTo}: MainViewBankerViewTransferButtonProps) {
 	const domain = useDomainOfType('main');
 
-	if (!domain.isBanker) {
+	if (!domain.asBanker) {
 		throw new Error('MainViewBankerViewTransferButton can only be used by the banker.');
 	}
 
 	const transfer = useCallback((amount: number) => {
+		if (!domain.asBanker) {
+			throw new Error('MainViewBankerViewTransferButton can only be used by the banker.');
+		}
+
 		if (transferTo === 'all') {
-			domain.transferAsBankerToAll(amount);
+			domain.asBanker.transferAsBankerToAll(amount);
 		} else {
-			domain.transferAsBanker(transferTo.id, amount);
+			domain.asBanker.transferAsBanker(transferTo.id, amount);
 		}
 	}, [domain, transferTo]);
 
