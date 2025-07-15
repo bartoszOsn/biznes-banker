@@ -47,6 +47,7 @@ function operationDTOToTransaction(operation: SessionDTO['operations'][string]):
 		fromUserId: operation.moneyFromPlayerId,
 		toUserId: operation.moneyToPlayerId,
 		amount: operation.amount,
-		timestamp: operation.timestamp
+		timestamp: operation.timestamp,
+		description: operation.description
 	}
 }

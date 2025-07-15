@@ -39,13 +39,13 @@ export interface MainDomain {
 	opponents: User[];
 	balance: number;
 	transactions: Transaction[];
-	transfer: (toUserId: string, amount: number) => void;
-	transferToBanker: (amount: number) => void;
-	transferToAllButMe: (amount: number) => void;
+	transfer: (toUserId: string, amount: number, description?: string) => void;
+	transferToBanker: (amount: number, description?: string) => void;
+	transferToAllButMe: (amount: number, description?: string) => void;
 	presets: Preset[];
 	asBanker?: null | {
-		transferAsBanker: (toUserId: string, amount: number) => void;
-		transferAsBankerToAll: (amount: number) => void;
+		transferAsBanker: (toUserId: string, amount: number, description?: string) => void;
+		transferAsBankerToAll: (amount: number, description?: string) => void;
 		changeBankerTo: (userId: string) => void;
 		role: CircumstanceRole;
 		setRole: (role: CircumstanceRole) => void;

@@ -3,4 +3,5 @@ export interface Transaction {
 	toUserId: 'banker' | string;
 	amount: number;
 	timestamp: number;
+	description: string;
 }

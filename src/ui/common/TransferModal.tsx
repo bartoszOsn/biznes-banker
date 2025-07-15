@@ -1,24 +1,26 @@
 import { type MouseEvent, type ReactNode, useCallback, useState } from 'react';
 import type { Preset } from '../../domain/model/Preset.ts';
 import { useDisclosure } from '@mantine/hooks';
-import { Button, Group, Modal, NumberInput, Stack, Text } from '@mantine/core';
+import { Button, Group, Modal, NumberInput, Stack, Text, Textarea } from '@mantine/core';
 import { Money } from '../util/Money.tsx';
 
 export interface TransferModalProps {
 	children: (onClick: (e: MouseEvent) => void) => ReactNode;
 	presets: Preset[];
 	title: string;
-	onTransfer: (amount: number) => void;
+	onTransfer: (amount: number, description: string) => void;
 	validate?: (amount: number) => string | ReactNode | null;
 }
 
 export function TransferModal(props: TransferModalProps) {
 	const [opened, {open, close}] = useDisclosure(false);
 	const [amount, setAmount] = useState<number | undefined>(undefined);
+	const [description, setDescription] = useState<string>('');
 
 	const onClose = useCallback(() => {
 		close();
 		setAmount(undefined);
+		setDescription('');
 	}, [close]);
 
 	const onOpen = useCallback((e: MouseEvent) => {
@@ -26,18 +28,14 @@ export function TransferModal(props: TransferModalProps) {
 		open();
 	}, [open]);
 
-	const transfer = useCallback((customAmount?: number) => {
-		if (customAmount === undefined) {
-			customAmount = amount;
-		}
-
+	const transfer = useCallback((customAmount?: number, description: string = '') => {
 		if (customAmount === undefined || customAmount <= 0) {
 			return;
 		}
 
-		props.onTransfer(customAmount);
+		props.onTransfer(customAmount, description);
 		onClose();
-	}, [amount, props.onTransfer, onClose]);
+	}, [props.onTransfer, onClose]);
 
 	const validate = (amount?: number) => {
 		if (amount === undefined || amount <= 0) {
@@ -60,21 +58,25 @@ export function TransferModal(props: TransferModalProps) {
 			<Modal opened={opened} onClose={onClose} title={ props.title }>
 				<Stack gap="lg">
 					<form onSubmit={(e) => {
-						transfer();
+						transfer(amount, description);
 						e.preventDefault();
 					}}>
 						<Stack gap="md">
 							<NumberInput data-autofocus
+										 label="Amount"
 										 size="lg"
 										 prefix="$"
 										 thousandSeparator
 										 value={amount}
 										 error={ validate(amount) }
 										 onChange={(v) => setAmount(typeof v !== 'number' ? undefined : Number(v))}/>
+							<Textarea label='Description'
+									  value={description}
+									  onChange={e => setDescription(e.currentTarget.value)}/>
 							<Group gap="xs">
 								{
 									props.presets.map((preset, index) => (
-										<Button key={index} variant="light" size="lg" onClick={() => transfer(preset.amount)}
+										<Button key={index} variant="light" size="lg" onClick={() => transfer(preset.amount, preset.name)}
 												disabled={!!props.validate?.(preset.amount)}>
 											<Stack gap="0" align="start">
 												<Text size="xs" c="gray">{preset.name}</Text>
@@ -86,7 +88,7 @@ export function TransferModal(props: TransferModalProps) {
 							</Group>
 						</Stack>
 					</form>
-					<Button onClick={() => transfer()} disabled={!!validate(amount)}>Transfer</Button>
+					<Button onClick={() => transfer(amount, description)} disabled={!!validate(amount)}>Transfer</Button>
 				</Stack>
 			</Modal>
 		</>

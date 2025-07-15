@@ -16,6 +16,7 @@ export interface SessionDTO {
 			moneyToPlayerId: 'banker' | string;
 			amount: number;
 			timestamp: number;
+			description: string;
 		}
 	};
 	startingMoney?: number;

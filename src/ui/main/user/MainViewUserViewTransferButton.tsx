@@ -14,13 +14,13 @@ export interface MainViewUserViewTransferButtonProps {
 export function MainViewUserViewTransferButton({transferTo}: MainViewUserViewTransferButtonProps) {
 	const domain = useDomainOfType('main');
 
-	const transfer = useCallback((amount: number) => {
+	const transfer = useCallback((amount: number, description: string) => {
 		if (transferTo === 'all') {
-			domain.transferToAllButMe(amount);
+			domain.transferToAllButMe(amount, description);
 		} else if (transferTo === 'banker') {
-			domain.transferToBanker(amount);
+			domain.transferToBanker(amount, description);
 		} else {
-			domain.transfer(transferTo.id, amount);
+			domain.transfer(transferTo.id, amount, description);
 		}
 	}, [domain, transferTo]);
 

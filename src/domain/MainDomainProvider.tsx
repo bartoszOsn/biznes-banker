@@ -28,7 +28,7 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 		return acc;
 	}, 0) + (session.startingMoney ?? 0), [session.startingMoney, session.transactions, userId]);
 	
-	const transfer = useCallback((toUserId: string, amount: number) => {
+	const transfer = useCallback((toUserId: string, amount: number, description: string = '') => {
 		if (toUserId === userId) {
 			throw new Error('Cannot transfer money to yourself.');
 		}
@@ -39,10 +39,10 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 			throw new Error('Insufficient balance for transfer.');
 		}
 
-		pushTransaction(session.id, userId, toUserId, amount).then();
+		pushTransaction(session.id, userId, toUserId, amount, description).then();
 	}, [balance, session.id, userId]);
 	
-	const transferToAllButMe = useCallback((amount: number) => {
+	const transferToAllButMe = useCallback((amount: number, description: string = '') => {
 		const wholeAmount = amount * opponents.length;
 		if (amount <= 0) {
 			throw new Error('Transfer amount must be greater than zero.');
@@ -52,11 +52,11 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 		}
 
 		for (const opponent of opponents) {
-			transfer(opponent.id, amount);
+			transfer(opponent.id, amount, description);
 		}
 	}, [balance, opponents, transfer]);
 	
-	const transferToBanker = useCallback((amount: number) => {
+	const transferToBanker = useCallback((amount: number, description: string = '') => {
 		if (amount <= 0) {
 			throw new Error('Transfer amount must be greater than zero.');
 		}
@@ -64,7 +64,7 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 			throw new Error('Insufficient balance for transfer.');
 		}
 
-		pushTransaction(session.id, userId, 'banker', amount).then();
+		pushTransaction(session.id, userId, 'banker', amount, description).then();
 	}, [balance, session.id, userId]);
 
 	const [role, setRole] = useState<CircumstanceRole>(CircumstanceRole.USER);
@@ -77,13 +77,13 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 		pushBankerId(session.id, userId).then();
 	}, [me, session.id]);
 	
-	const transferAsBanker = useCallback((toUserId: string, amount: number) => {
-		pushTransaction(session.id, 'banker', toUserId, amount).then();
+	const transferAsBanker = useCallback((toUserId: string, amount: number, description: string = '') => {
+		pushTransaction(session.id, 'banker', toUserId, amount, description).then();
 	}, [session.id]);
 	
-	const transferAsBankerToAll = useCallback((amount: number) => {
+	const transferAsBankerToAll = useCallback((amount: number, description: string = '') => {
 		for (const user of session.users) {
-			transferAsBanker(user.id, amount);
+			transferAsBanker(user.id, amount, description);
 		}
 	}, [session.users, transferAsBanker]);
 

@@ -1,6 +1,6 @@
 import type { Transaction } from '../../../domain/model/Transaction.ts';
 import { useDomainOfType } from '../../../domain/useDomainOfType.ts';
-import { ThemeIcon } from '@mantine/core';
+import { Text } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 
 export interface MainViewTransactionIconProps {
@@ -13,22 +13,19 @@ export function MainViewTransactionIcon(props: MainViewTransactionIconProps) {
 
 	if (props.transaction.toUserId === domain.me.id) {
 		return (
-			<ThemeIcon color="green" size={24} radius="xl">
-				<IconPlus size={16} />
-			</ThemeIcon>
+			<Text c="green" inherit inline component='span'>
+				<IconPlus size={12} />
+			</Text>
 		);
 	}
 
 	if (props.transaction.fromUserId === domain.me.id) {
 		return (
-			<ThemeIcon color="red" size={24} radius="xl">
-				<IconMinus size={16} />
-			</ThemeIcon>
+			<Text c="red" inherit inline component='span'>
+				<IconMinus size={12} />
+			</Text>
 		);
 	}
 
-	return (
-		<ThemeIcon color="gray" size={24} radius="xl">
-		</ThemeIcon>
-	);
+	return null;
 }

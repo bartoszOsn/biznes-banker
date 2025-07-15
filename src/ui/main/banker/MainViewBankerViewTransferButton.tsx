@@ -16,15 +16,15 @@ export function MainViewBankerViewTransferButton({transferTo}: MainViewBankerVie
 		throw new Error('MainViewBankerViewTransferButton can only be used by the banker.');
 	}
 
-	const transfer = useCallback((amount: number) => {
+	const transfer = useCallback((amount: number, description: string) => {
 		if (!domain.asBanker) {
 			throw new Error('MainViewBankerViewTransferButton can only be used by the banker.');
 		}
 
 		if (transferTo === 'all') {
-			domain.asBanker.transferAsBankerToAll(amount);
+			domain.asBanker.transferAsBankerToAll(amount, description);
 		} else {
-			domain.asBanker.transferAsBanker(transferTo.id, amount);
+			domain.asBanker.transferAsBanker(transferTo.id, amount, description);
 		}
 	}, [domain, transferTo]);
 
