@@ -1,11 +1,10 @@
 import { type ReactNode, useCallback } from 'react';
 import type { DomainWithoutUser } from '../Domain.ts';
 import type { UserColor } from '../model/UserColor.ts';
-import { selectUserCountOnce } from '../../infrastructure/firebase/selectUserCountOnce.ts';
-import { pushNewUser } from '../../infrastructure/firebase/pushNewUser.ts';
 import { getUserIdLSKey } from '../util/getUserIdLSKey.ts';
 import { DomainContext } from '../DomainContext.ts';
 import type { Session } from '../model/Session.ts';
+import { useRepository } from '../Repository.ts';
 
 export interface DomainWithoutUserProviderProps {
 	children: ReactNode;
@@ -15,6 +14,7 @@ export interface DomainWithoutUserProviderProps {
 
 export function DomainWithoutUserProvider(props: DomainWithoutUserProviderProps): ReactNode {
 	const { children, session, setUserId } = props;
+	const { pushNewUser, selectUserCountOnce } = useRepository();
 
 	const setUserProps = useCallback((name: string, color: UserColor) => {
 		selectUserCountOnce(session.id)

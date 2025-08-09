@@ -2,10 +2,9 @@ import type { Session } from '../model/Session.ts';
 import type { MainDomain } from '../Domain.ts';
 import { splitUsersToMeAndOpponents } from '../util/splitUsersToMeAndOpponents.ts';
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
-import { pushTransaction } from '../../infrastructure/firebase/pushTransaction.ts';
 import { DomainContext } from '../DomainContext.ts';
 import { CircumstanceRole } from '../model/CircumstanceRole.ts';
-import { pushBankerId } from '../../infrastructure/firebase/pushBankerId.ts';
+import { useRepository } from '../Repository.ts';
 
 export interface MainDomainProviderProps {
 	children: ReactNode;
@@ -15,6 +14,7 @@ export interface MainDomainProviderProps {
 
 export function MainDomainProvider(props: MainDomainProviderProps) {
 	const { children, session, userId } = props;
+	const { pushBankerId, pushTransaction } = useRepository();
 
 	const [me, opponents] = splitUsersToMeAndOpponents(session.users, userId);
 

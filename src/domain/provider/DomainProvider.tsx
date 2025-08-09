@@ -1,13 +1,14 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
 import { SESSION_ID_QUERY_PARAM } from '../util/SESSION_ID_QUERY_PARAM.ts';
-import { useSelectSession } from '../../infrastructure/firebase/useSelectSession.ts';
 import { getUserIdLSKey } from '../util/getUserIdLSKey.ts';
 import { DomainWithoutSessionProvider } from './DomainWithoutSessionProvider.tsx';
 import { DomainWithoutUserProvider } from './DomainWithoutUserProvider.tsx';
 import { DomainWithoutStartingProvider } from './DomainWithoutStartingProvider.tsx';
 import { MainDomainProvider } from './MainDomainProvider.tsx';
+import { useRepository } from '../Repository.ts';
 
 export function DomainProvider({ children }: { children: ReactNode }): ReactNode {
+	const { useSelectSession } = useRepository();
 	const [sessionId, setSessionIdState] = useState<string | null>(() => {
 		const queryParams = new URLSearchParams(window.location.search);
 		return queryParams.get(SESSION_ID_QUERY_PARAM) || null;
