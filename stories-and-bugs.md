@@ -15,8 +15,12 @@
 - ✅ [Story] - As a user I want to be able to hide my money amount
 - ✅ [Story] - As a user I want to have a sound notification when I receive money
 - ✅ [Story] - As a user I want my screen to not lock when I use the app
-- 🔵 [Story] - As a user I want to be able to add optional description to the transaction
-- 🔵 [Story] - As a user I want to be able to view newest transactions first
+- ✅ [Story] - As a user I want to be able to add optional description to the transaction
+- ✅ [Story] - As a user I want to be able to view newest transactions first
+- 🔵 [Technical item] - Authentication should use firebase anonymous auth instead of userKey in local storage
+- 🔵 [Story] - In the lobby banker can kick users
+- 🔵 [Story] - user can change their username and color in the lobby and in the game
+- 🔵 [Story] - In transfer modal hide description field under button, so that without clicking it, clicking "next" on the keyboard will submit the form
 - 🔵 [Story] - As a user I want to view last transaction of mine below balance
 - 🔵 [Bug] - When money is sent to all users, only last user has sound notification.
 - Might be good oportunity to store transfer to all users as one transaction in database.
