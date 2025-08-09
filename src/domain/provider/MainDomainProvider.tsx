@@ -1,11 +1,11 @@
-import type { Session } from './model/Session.ts';
-import type { MainDomain } from './Domain.ts';
-import { splitUsersToMeAndOpponents } from './splitUsersToMeAndOpponents.ts';
+import type { Session } from '../model/Session.ts';
+import type { MainDomain } from '../Domain.ts';
+import { splitUsersToMeAndOpponents } from '../util/splitUsersToMeAndOpponents.ts';
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
-import { pushTransaction } from '../infrastructure/firebase/pushTransaction.ts';
-import { DomainContext } from './DomainContext.ts';
-import { CircumstanceRole } from './model/CircumstanceRole.ts';
-import { pushBankerId } from '../infrastructure/firebase/pushBankerId.ts';
+import { pushTransaction } from '../../infrastructure/firebase/pushTransaction.ts';
+import { DomainContext } from '../DomainContext.ts';
+import { CircumstanceRole } from '../model/CircumstanceRole.ts';
+import { pushBankerId } from '../../infrastructure/firebase/pushBankerId.ts';
 
 export interface MainDomainProviderProps {
 	children: ReactNode;

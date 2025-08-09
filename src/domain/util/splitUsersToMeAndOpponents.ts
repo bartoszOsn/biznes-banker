@@ -1,4 +1,4 @@
-import type { User } from "./model/User.ts";
+import type { User } from "../model/User.ts";
 
 export function splitUsersToMeAndOpponents(users: User[], myId: string): [me: User, opponents: User[]] {
 	const me =  users.find((user) => user.id === myId);

@@ -1,7 +1,7 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
-import { SESSION_ID_QUERY_PARAM } from './SESSION_ID_QUERY_PARAM.ts';
-import { useSelectSession } from '../infrastructure/firebase/useSelectSession.ts';
-import { getUserIdLSKey } from './getUserIdLSKey.ts';
+import { SESSION_ID_QUERY_PARAM } from '../util/SESSION_ID_QUERY_PARAM.ts';
+import { useSelectSession } from '../../infrastructure/firebase/useSelectSession.ts';
+import { getUserIdLSKey } from '../util/getUserIdLSKey.ts';
 import { DomainWithoutSessionProvider } from './DomainWithoutSessionProvider.tsx';
 import { DomainWithoutUserProvider } from './DomainWithoutUserProvider.tsx';
 import { DomainWithoutStartingProvider } from './DomainWithoutStartingProvider.tsx';

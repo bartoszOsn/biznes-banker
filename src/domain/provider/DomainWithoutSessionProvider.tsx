@@ -1,7 +1,7 @@
 import { type ReactNode, useCallback } from 'react';
-import type { DomainWithoutSession } from './Domain.ts';
-import { pushNewSession } from '../infrastructure/firebase/pushNewSession.ts';
-import { DomainContext } from './DomainContext.ts';
+import type { DomainWithoutSession } from '../Domain.ts';
+import { pushNewSession } from '../../infrastructure/firebase/pushNewSession.ts';
+import { DomainContext } from '../DomainContext.ts';
 
 export interface DomainWithoutSessionProviderProps {
 	children: ReactNode;

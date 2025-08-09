@@ -1,12 +1,12 @@
 import { type ReactNode, useCallback } from 'react';
-import type { DomainWithoutStarting } from './Domain.ts';
-import type { Session } from './model/Session.ts';
-import { DomainContext } from './DomainContext.ts';
-import { pushSessionStarted } from '../infrastructure/firebase/pushSessionStarted.ts';
-import { pushStartingMoney } from '../infrastructure/firebase/pushStartingMoney.ts';
-import { pushPresets } from '../infrastructure/firebase/pushPresets.ts';
-import type { Preset } from './model/Preset.ts';
-import { splitUsersToMeAndOpponents } from './splitUsersToMeAndOpponents.ts';
+import type { DomainWithoutStarting } from '../Domain.ts';
+import type { Session } from '../model/Session.ts';
+import { DomainContext } from '../DomainContext.ts';
+import { pushSessionStarted } from '../../infrastructure/firebase/pushSessionStarted.ts';
+import { pushStartingMoney } from '../../infrastructure/firebase/pushStartingMoney.ts';
+import { pushPresets } from '../../infrastructure/firebase/pushPresets.ts';
+import type { Preset } from '../model/Preset.ts';
+import { splitUsersToMeAndOpponents } from '../util/splitUsersToMeAndOpponents.ts';
 
 export interface DomainWithoutStartingProviderProps {
 	children: ReactNode;
