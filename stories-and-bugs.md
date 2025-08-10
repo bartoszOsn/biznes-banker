@@ -17,11 +17,11 @@
 - ✅ [Story] - As a user I want my screen to not lock when I use the app
 - ✅ [Story] - As a user I want to be able to add optional description to the transaction
 - ✅ [Story] - As a user I want to be able to view newest transactions first
-- 🔵 [Technical item] - Authentication should use firebase anonymous auth instead of userKey in local storage
+- ✅ [Technical item] - Authentication should use firebase anonymous auth instead of userKey in local storage
   - ✅ Clean up a domain, so that files are better organized
   - ✅ Refactor infrastructure to use providers
   - ✅ Remove singleton pattern from infrastructure for accessing db using higher order functions
-  - 🔵 Refactor authentication to use firebase anonymous auth
+  - ✅ Refactor authentication to use firebase anonymous auth
 - 🔵 [Story] - In the lobby banker can kick users
 - 🔵 [Story] - user can change their username and color in the lobby and in the game
 - 🔵 [Story] - In transfer modal hide description field under button, so that without clicking it, clicking "next" on the keyboard will submit the form

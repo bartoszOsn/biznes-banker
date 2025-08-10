@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { connectDatabaseEmulator, getDatabase } from 'firebase/database';
 import { getAnalytics, logEvent, setAnalyticsCollectionEnabled } from 'firebase/analytics';
 import { useOnce, useOnceEffect } from '../../../util/useOnce.ts';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBIiUgI3piABMMCbNbVwQrS8bzd6PR14cY",
@@ -18,6 +19,7 @@ export function useFirebaseApp() {
 	const firebaseApp = useOnce(() => initializeApp(firebaseConfig));
 	const database = useOnce(() => getDatabase(firebaseApp));
 	const analytics = useOnce(() => getAnalytics(firebaseApp));
+	const auth = useOnce(() => getAuth(firebaseApp));
 
 	useOnceEffect(() => {
 		if (__EMULATOR_URL__) {
@@ -46,6 +48,7 @@ export function useFirebaseApp() {
 	return {
 		firebaseApp,
 		database,
-		analytics
+		analytics,
+		auth
 	};
 }

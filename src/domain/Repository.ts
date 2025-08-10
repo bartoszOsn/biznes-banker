@@ -4,6 +4,8 @@ import type { Preset } from './model/Preset.ts';
 import type { Session } from './model/Session.ts';
 
 export interface Repository {
+	userId: string;
+
 	pushBankerId(sessionId: string, bankerId: string): Promise<void>;
 	pushNewSession(): Promise<string>;
 	pushNewUser(sessionId: string, name: string, color: UserColor, isBanker?: boolean): Promise<string>;

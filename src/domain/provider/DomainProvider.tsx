@@ -1,6 +1,5 @@
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { SESSION_ID_QUERY_PARAM } from '../util/SESSION_ID_QUERY_PARAM.ts';
-import { getUserIdLSKey } from '../util/getUserIdLSKey.ts';
 import { DomainWithoutSessionProvider } from './DomainWithoutSessionProvider.tsx';
 import { DomainWithoutUserProvider } from './DomainWithoutUserProvider.tsx';
 import { DomainWithoutStartingProvider } from './DomainWithoutStartingProvider.tsx';
@@ -8,7 +7,7 @@ import { MainDomainProvider } from './MainDomainProvider.tsx';
 import { useRepository } from '../Repository.ts';
 
 export function DomainProvider({ children }: { children: ReactNode }): ReactNode {
-	const { useSelectSession } = useRepository();
+	const { useSelectSession, userId } = useRepository();
 	const [sessionId, setSessionIdState] = useState<string | null>(() => {
 		const queryParams = new URLSearchParams(window.location.search);
 		return queryParams.get(SESSION_ID_QUERY_PARAM) || null;
@@ -27,23 +26,6 @@ export function DomainProvider({ children }: { children: ReactNode }): ReactNode
 
 	const session = useSelectSession(sessionId);
 
-	const [userId, setUserId] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!sessionId) {
-			setUserId(null);
-			return;
-		}
-
-		const lsKey = getUserIdLSKey(sessionId);
-		const storedUserId = localStorage.getItem(lsKey);
-		if (storedUserId) {
-			setUserId(storedUserId);
-		} else {
-			setUserId(null);
-		}
-	}, [sessionId]);
-
 	if (!sessionId || !session) {
 		return (
 			<DomainWithoutSessionProvider setSessionId={setSessionId}>
@@ -52,9 +34,9 @@ export function DomainProvider({ children }: { children: ReactNode }): ReactNode
 		);
 	}
 
-	if (!userId) {
+	if (!session.users.some(user => user.id === userId)) {
 		return (
-			<DomainWithoutUserProvider session={session} setUserId={setUserId}>
+			<DomainWithoutUserProvider session={session}>
 				{children}
 			</DomainWithoutUserProvider>
 		);

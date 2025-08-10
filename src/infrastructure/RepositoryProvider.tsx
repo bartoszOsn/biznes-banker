@@ -10,14 +10,17 @@ import { pushPresets } from './firebase/pushPresets.ts';
 import { selectUserCountOnce } from './firebase/selectUserCountOnce.ts';
 import { type ReactNode, useMemo } from 'react';
 import { useFirebaseApp } from './firebase/util/useFirebaseApp.ts';
+import { useUser } from './firebase/util/useUser.ts';
 
 export function RepositoryProvider({ children }: { children: ReactNode }) {
-	const { database } = useFirebaseApp();
+	const { database, auth } = useFirebaseApp();
+	const user = useUser(auth);
 
 	const repository: Repository = useMemo(() => ({
+		userId: user?.uid || '',
 		pushBankerId: pushBankerId(database),
 		pushNewSession: pushNewSession(database),
-		pushNewUser: pushNewUser(database),
+		pushNewUser: pushNewUser(database, user?.uid ?? ''),
 		pushPresets: pushPresets(database),
 		pushSessionStarted: pushSessionStarted(database),
 		pushStartingMoney: pushStartingMoney(database),
@@ -25,7 +28,11 @@ export function RepositoryProvider({ children }: { children: ReactNode }) {
 		selectUserCountOnce: selectUserCountOnce(database),
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useSelectSession: useSelectSession(database),
-	}), [database]);
+	}), [database, user]);
+
+	if (repository.userId === '') {
+		return null;
+	}
 
 	return (
 		<RepositoryContext.Provider value={repository}>
