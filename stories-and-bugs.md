@@ -20,7 +20,7 @@
 - 🔵 [Technical item] - Authentication should use firebase anonymous auth instead of userKey in local storage
   - ✅ Clean up a domain, so that files are better organized
   - ✅ Refactor infrastructure to use providers
-  - 🔵 Remove singleton pattern from infrastructure for accessing db using higher order functions
+  - ✅ Remove singleton pattern from infrastructure for accessing db using higher order functions
   - 🔵 Refactor authentication to use firebase anonymous auth
 - 🔵 [Story] - In the lobby banker can kick users
 - 🔵 [Story] - user can change their username and color in the lobby and in the game

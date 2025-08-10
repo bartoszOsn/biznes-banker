@@ -1,9 +1,8 @@
-import { set } from 'firebase/database';
-import { db } from './fb.ts';
+import { type Database, set } from 'firebase/database';
 import { getRef } from './util/getRef.ts';
 import type { Preset } from '../../domain/model/Preset.ts';
 
-export async function pushPresets(sessionId: string, presets: Preset[]): Promise<void> {
+export const pushPresets = (db: Database) => async (sessionId: string, presets: Preset[]): Promise<void> => {
 	const presetsRef = getRef(db,sessionId, 'presets');
 	const presetsDTO = Object.fromEntries(
 		presets.map((preset, index) => [
@@ -16,4 +15,4 @@ export async function pushPresets(sessionId: string, presets: Preset[]): Promise
 	);
 
 	await set(presetsRef, presetsDTO);
-}
+};

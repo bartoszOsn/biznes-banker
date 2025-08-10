@@ -1,13 +1,14 @@
 import type { Session } from '../../domain/model/Session.ts';
 import { useEffect, useState } from 'react';
-import { db } from './fb.ts';
-import { onValue, ref } from 'firebase/database';
+import { type Database, onValue, ref } from 'firebase/database';
 import type { SessionDTO } from './SessionDTO.ts';
 import { sessionDTOToSession } from './sessionDTOToSession.ts';
 
-export function useSelectSession(sessionId: string | null): Session | null {
+export const useSelectSession = (db: Database) => (sessionId: string | null): Session | null => {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [session, setSession] = useState<SessionDTO | null>(null);
 
+	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
 		if (!sessionId) {
 			setSession(null);
@@ -28,4 +29,4 @@ export function useSelectSession(sessionId: string | null): Session | null {
 	}, [sessionId]);
 
 	return session === null || sessionId === null ? null : sessionDTOToSession(sessionId, session);
-}
+};

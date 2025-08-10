@@ -1,10 +1,7 @@
 import type { SessionDTO } from './SessionDTO.ts';
-import { push, ref, serverTimestamp } from 'firebase/database';
-import { db } from './fb.ts';
+import { type Database, push, ref, serverTimestamp } from 'firebase/database';
 
-const sessionsRef = ref(db, 'sessions');
-
-export async function pushNewSession(): Promise<string> {
+export const pushNewSession = (db: Database) => async (): Promise<string> => {
 	const session: SessionDTO = {
 		createdAt: serverTimestamp() as unknown as number,
 		started: false,
@@ -13,12 +10,13 @@ export async function pushNewSession(): Promise<string> {
 		operations: {}
 	};
 
-	const ref = await push(sessionsRef, session);
-	const key = ref.key;
+	const sessionsRef = ref(db, 'sessions');
+	const sessionRef = await push(sessionsRef, session);
+	const key = sessionRef.key;
 
 	if (!key) {
 		throw new Error('Failed to create new session: no key returned from push');
 	}
 
 	return key;
-}
+};
