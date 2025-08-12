@@ -30,6 +30,7 @@ export interface DomainWithoutStarting {
 		presets: Preset[],
 		setStartingMoney: (amount: number | null) => void;
 		setPresets: (presets: Preset[]) => void;
+		kickUser: (user: User) => void;
 	}
 }
 

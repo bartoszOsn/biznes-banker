@@ -19,6 +19,7 @@ export interface Repository {
 					description?: string): Promise<void>;
 	selectUserCountOnce(sessionId: string): Promise<number>;
 	useSelectSession(sessionId: string | null): Session | null;
+	removeUserFromSession(sessionId: string, userId: string): Promise<void>;
 }
 
 export const RepositoryContext = createContext<Repository | null>(null);

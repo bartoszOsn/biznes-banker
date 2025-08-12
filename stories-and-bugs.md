@@ -24,17 +24,17 @@
   - ✅ Refactor authentication to use firebase anonymous auth
 - ✅ [Technical item] - Refactor domain so that all actions are separate hooks to avoid code duplication
 - ✅ [Technical item] - Refactor domain so that all data queries are separate hooks to avoid code duplication
-- 🔵 [Story] - In the lobby banker can kick users
+- ✅ [Story] - In the lobby banker can kick users
 - 🔵 [Story] - user can change their username and color in the lobby
 - 🔵 [Story] - In transfer modal hide description field under button, so that without clicking it, clicking "next" on the keyboard will submit the form
 - 🔵 [Story] - As a user I want to view last transaction of mine below balance
 - 🔵 [Bug] - When money is sent to all users, only last user has sound notification.
-- Might be good oportunity to store transfer to all users as one transaction in database.
+  - Might be good oportunity to store transfer to all users as one transaction in database.
 - 🔵 [Story] - As a banker I want to see bank balance, to better catch up cheat attempts
 - 🔵 [Story] - As a user I want to see who is online
 - 🔵 [Story] - As a user I want better visuals
 - 🔵 [Story] - Add rules to realtime database
-- 🔵 [Bug] -Very long usernames are not displayed correctly
+- 🔵 [Bug] - Very long usernames are not displayed correctly
 - 🔵 [Story] - As a user I want to be able to change my username and color during the game
 - 🔵 [Story] - As a user I want to not be able to set my password to "Banker"
 - 🔵 [Bug] - When adding presets in preset modal, they reset when new user joins

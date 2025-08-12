@@ -1,7 +1,7 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 import { ActionIcon, Box, Button, Card, ColorSwatch, CopyButton, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import dollarGrid from '../../assets/dollar-grid.webp';
-import { IconCheck, IconCopy, IconCurrencyDollar } from '@tabler/icons-react';
+import { IconCheck, IconCopy, IconCurrencyDollar, IconX } from '@tabler/icons-react';
 import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { useCallback } from 'react';
@@ -52,12 +52,16 @@ export function WaitForUsersView() {
 						<Stack gap={8} w='100%' align='center'>
 							{
 								domain.me && (
-									<UserIndicator user={domain.me} isMe={true} />
+									<UserIndicator user={domain.me}
+												   isMe={true} />
 								)
 							}
 							{
 								domain.opponents.map((user) => (
-									<UserIndicator key={user.id} user={user} isMe={false} />
+									<UserIndicator key={user.id}
+												   user={user}
+												   isMe={false}
+												   kick={domain.asBanker ? () => domain.asBanker?.kickUser(user) : undefined}/>
 								))
 							}
 						</Stack>
@@ -76,7 +80,7 @@ export function WaitForUsersView() {
 	)
 }
 
-function UserIndicator(props: { user: User, isMe: boolean }) {
+function UserIndicator(props: { user: User, isMe: boolean, kick?: () => void }) {
 	return (
 		<Group>
 			<ColorSwatch size={props.isMe ? 32 : 28} color={userColorToMantineVar(props.user.color)}>
@@ -85,6 +89,13 @@ function UserIndicator(props: { user: User, isMe: boolean }) {
 				}
 			</ColorSwatch>
 			<Text size={props.isMe ? 'xl' : 'md'} style={{fontWeight: props.isMe ? 'bold' : 'normal'}}>{props.user.name}</Text>
+			{
+				props.kick && (
+					<ActionIcon variant="subtle" color="red" title="Kick user" style={{ alignSelf: 'end' }} onClick={props.kick}>
+						<IconX size={18} />
+					</ActionIcon>
+				)
+			}
 		</Group>
 	);
 
