@@ -2,10 +2,11 @@ import { type ReactNode } from 'react';
 import type { DomainWithoutStarting } from '../Domain.ts';
 import type { Session } from '../model/Session.ts';
 import { DomainContext } from '../DomainContext.ts';
-import { splitUsersToMeAndOpponents } from '../util/splitUsersToMeAndOpponents.ts';
 import { useStartGame } from '../actions/useStartGame.ts';
 import { useSetStartingMoney } from '../actions/useSetStartingMoney.ts';
 import { useSetPresets } from '../actions/useSetPresets.ts';
+import { useJoinLink } from '../data-derivers/useJoinLink.ts';
+import { useSplitUsersToMeAndOpponents } from '../data-derivers/useSplitUsersToMeAndOpponents.ts';
 
 export interface DomainWithoutStartingProviderProps {
 	children: ReactNode;
@@ -15,13 +16,11 @@ export interface DomainWithoutStartingProviderProps {
 
 export function DomainWithoutStartingProvider(props: DomainWithoutStartingProviderProps): ReactNode {
 	const { children, session, userId } = props;
+	const { presets, startingMoney } = session;
 
-	const joinLink = window.location.href;
+	const joinLink = useJoinLink();
+	const [me, opponents] = useSplitUsersToMeAndOpponents(session.users, userId);
 
-	const [me, opponents] = splitUsersToMeAndOpponents(session.users, userId);
-
-	const presets = session.presets;
-	const startingMoney = session.startingMoney;
 	const startGame = useStartGame(session);
 	const setStartingMoney = useSetStartingMoney(session);
 	const setPresets = useSetPresets(session);
