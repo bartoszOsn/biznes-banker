@@ -22,6 +22,8 @@
   - ✅ Refactor infrastructure to use providers
   - ✅ Remove singleton pattern from infrastructure for accessing db using higher order functions
   - ✅ Refactor authentication to use firebase anonymous auth
+- ✅ [Technical item] - Refactor domain so that all actions are separate hooks to avoid code duplication
+- 🔵 [Technical item] - Refactor domain so that all data queries are separate hooks to avoid code duplication
 - 🔵 [Story] - In the lobby banker can kick users
 - 🔵 [Story] - user can change their username and color in the lobby and in the game
 - 🔵 [Story] - In transfer modal hide description field under button, so that without clicking it, clicking "next" on the keyboard will submit the form

@@ -1,10 +1,15 @@
 import type { Session } from '../model/Session.ts';
 import type { MainDomain } from '../Domain.ts';
 import { splitUsersToMeAndOpponents } from '../util/splitUsersToMeAndOpponents.ts';
-import { type ReactNode, useCallback, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { DomainContext } from '../DomainContext.ts';
 import { CircumstanceRole } from '../model/CircumstanceRole.ts';
-import { useRepository } from '../Repository.ts';
+import { useTransfer } from '../actions/useTransfer.ts';
+import { useTransferToAllButMe } from '../actions/useTransferToAllButMe.ts';
+import { useTransferToBanker } from '../actions/useTransferToBanker.ts';
+import { useChangeBankerTo } from '../actions/useChangeBankerTo.ts';
+import { useTransferAsBanker } from '../actions/useTransferAsBanker.ts';
+import { useTransferAsBankerToAll } from '../actions/useTransferAsBankerToAll.ts';
 
 export interface MainDomainProviderProps {
 	children: ReactNode;
@@ -14,7 +19,6 @@ export interface MainDomainProviderProps {
 
 export function MainDomainProvider(props: MainDomainProviderProps) {
 	const { children, session, userId } = props;
-	const { pushBankerId, pushTransaction } = useRepository();
 
 	const [me, opponents] = splitUsersToMeAndOpponents(session.users, userId);
 
@@ -28,64 +32,15 @@ export function MainDomainProvider(props: MainDomainProviderProps) {
 		return acc;
 	}, 0) + (session.startingMoney ?? 0), [session.startingMoney, session.transactions, userId]);
 	
-	const transfer = useCallback((toUserId: string, amount: number, description: string = '') => {
-		if (toUserId === userId) {
-			throw new Error('Cannot transfer money to yourself.');
-		}
-		if (amount <= 0) {
-			throw new Error('Transfer amount must be greater than zero.');
-		}
-		if (amount > balance) {
-			throw new Error('Insufficient balance for transfer.');
-		}
-
-		pushTransaction(session.id, userId, toUserId, amount, description).then();
-	}, [balance, session.id, userId]);
-	
-	const transferToAllButMe = useCallback((amount: number, description: string = '') => {
-		const wholeAmount = amount * opponents.length;
-		if (amount <= 0) {
-			throw new Error('Transfer amount must be greater than zero.');
-		}
-		if (wholeAmount > balance) {
-			throw new Error('Insufficient balance for transfer.');
-		}
-
-		for (const opponent of opponents) {
-			transfer(opponent.id, amount, description);
-		}
-	}, [balance, opponents, transfer]);
-	
-	const transferToBanker = useCallback((amount: number, description: string = '') => {
-		if (amount <= 0) {
-			throw new Error('Transfer amount must be greater than zero.');
-		}
-		if (amount > balance) {
-			throw new Error('Insufficient balance for transfer.');
-		}
-
-		pushTransaction(session.id, userId, 'banker', amount, description).then();
-	}, [balance, session.id, userId]);
+	const transfer = useTransfer(session, me, balance);
+	const transferToAllButMe = useTransferToAllButMe(session, me, opponents, balance);
+	const transferToBanker = useTransferToBanker(session, me, balance);
 
 	const [role, setRole] = useState<CircumstanceRole>(CircumstanceRole.USER);
 
-	const changeBankerTo = useCallback((userId: string) => {
-		if (userId === me!.id) {
-			throw new Error('Cannot change banker to yourself.');
-		}
-
-		pushBankerId(session.id, userId).then();
-	}, [me, session.id]);
-	
-	const transferAsBanker = useCallback((toUserId: string, amount: number, description: string = '') => {
-		pushTransaction(session.id, 'banker', toUserId, amount, description).then();
-	}, [session.id]);
-	
-	const transferAsBankerToAll = useCallback((amount: number, description: string = '') => {
-		for (const user of session.users) {
-			transferAsBanker(user.id, amount, description);
-		}
-	}, [session.users, transferAsBanker]);
+	const changeBankerTo = useChangeBankerTo(session, me);
+	const transferAsBanker = useTransferAsBanker(session);
+	const transferAsBankerToAll = useTransferAsBankerToAll(session);
 
 	const asBanker: MainDomain['asBanker'] = me.isAlsoBanker ? {
 		role,

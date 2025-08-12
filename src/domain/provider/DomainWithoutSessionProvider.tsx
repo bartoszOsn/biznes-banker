@@ -1,7 +1,7 @@
-import { type ReactNode, useCallback } from 'react';
+import { type ReactNode } from 'react';
 import type { DomainWithoutSession } from '../Domain.ts';
 import { DomainContext } from '../DomainContext.ts';
-import { useRepository } from '../Repository.ts';
+import { useStartSession } from '../actions/useStartSession.ts';
 
 export interface DomainWithoutSessionProviderProps {
 	children: ReactNode;
@@ -11,13 +11,7 @@ export interface DomainWithoutSessionProviderProps {
 export function DomainWithoutSessionProvider(props: DomainWithoutSessionProviderProps): ReactNode {
 	const { children, setSessionId } = props;
 
-	const { pushNewSession } = useRepository();
-
-	const startSession = useCallback(() => {
-		pushNewSession().then((newSessionId) => {
-			setSessionId(newSessionId);
-		});
-	}, [setSessionId]);
+	const startSession = useStartSession(setSessionId);
 
 	const domain: DomainWithoutSession = {
 		stage: 'withoutSession',

@@ -1,9 +1,8 @@
-import { type ReactNode, useCallback } from 'react';
+import { type ReactNode } from 'react';
 import type { DomainWithoutUser } from '../Domain.ts';
-import type { UserColor } from '../model/UserColor.ts';
 import { DomainContext } from '../DomainContext.ts';
 import type { Session } from '../model/Session.ts';
-import { useRepository } from '../Repository.ts';
+import { useSetUserProps } from '../actions/useSetUserProps.ts';
 
 export interface DomainWithoutUserProviderProps {
 	children: ReactNode;
@@ -12,15 +11,8 @@ export interface DomainWithoutUserProviderProps {
 
 export function DomainWithoutUserProvider(props: DomainWithoutUserProviderProps): ReactNode {
 	const { children, session } = props;
-	const { pushNewUser, selectUserCountOnce } = useRepository();
 
-	const setUserProps = useCallback((name: string, color: UserColor) => {
-		selectUserCountOnce(session.id)
-			.then((userCount) => {
-				const isBanker = userCount === 0;
-				return pushNewUser(session.id, name, color, isBanker);
-			});
-	}, [pushNewUser, selectUserCountOnce, session.id]);
+	const setUserProps = useSetUserProps(session);
 
 	const domain: DomainWithoutUser = {
 		stage: 'withoutUser',
