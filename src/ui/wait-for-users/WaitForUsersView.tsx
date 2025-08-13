@@ -4,9 +4,10 @@ import dollarGrid from '../../assets/dollar-grid.webp';
 import { IconCheck, IconCopy, IconCurrencyDollar, IconX } from '@tabler/icons-react';
 import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
-import { useCallback } from 'react';
+import { type ReactNode, useCallback } from 'react';
 import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
 import { SelectMoneyPresetsButton } from './SelectMoneyPresetsButton.tsx';
+import { ChangeUsernameAndColorButton } from './ChangeUsernameAndColorButton.tsx';
 
 export function WaitForUsersView() {
 	const domain = useDomainOfType('withoutStarting');
@@ -53,15 +54,24 @@ export function WaitForUsersView() {
 							{
 								domain.me && (
 									<UserIndicator user={domain.me}
-												   isMe={true} />
+												   isMe={true}>
+										<ChangeUsernameAndColorButton />
+									</UserIndicator>
 								)
 							}
 							{
 								domain.opponents.map((user) => (
 									<UserIndicator key={user.id}
 												   user={user}
-												   isMe={false}
-												   kick={domain.asBanker ? () => domain.asBanker?.kickUser(user) : undefined}/>
+												   isMe={false}>
+										{
+											domain.asBanker && (
+												<ActionIcon variant="subtle" color="red" title="Kick user" style={{ alignSelf: 'end' }} onClick={() => domain.asBanker?.kickUser(user)}>
+													<IconX size={18} />
+												</ActionIcon>
+											)
+										}
+									</UserIndicator>
 								))
 							}
 						</Stack>
@@ -80,7 +90,7 @@ export function WaitForUsersView() {
 	)
 }
 
-function UserIndicator(props: { user: User, isMe: boolean, kick?: () => void }) {
+function UserIndicator(props: { user: User, isMe: boolean, children?: ReactNode }) {
 	return (
 		<Group>
 			<ColorSwatch size={props.isMe ? 32 : 28} color={userColorToMantineVar(props.user.color)}>
@@ -89,13 +99,7 @@ function UserIndicator(props: { user: User, isMe: boolean, kick?: () => void }) 
 				}
 			</ColorSwatch>
 			<Text size={props.isMe ? 'xl' : 'md'} style={{fontWeight: props.isMe ? 'bold' : 'normal'}}>{props.user.name}</Text>
-			{
-				props.kick && (
-					<ActionIcon variant="subtle" color="red" title="Kick user" style={{ alignSelf: 'end' }} onClick={props.kick}>
-						<IconX size={18} />
-					</ActionIcon>
-				)
-			}
+			{ props.children }
 		</Group>
 	);
 

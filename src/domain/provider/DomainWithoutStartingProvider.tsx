@@ -8,6 +8,7 @@ import { useSetPresets } from '../actions/useSetPresets.ts';
 import { useJoinLink } from '../data-derivers/useJoinLink.ts';
 import { useSplitUsersToMeAndOpponents } from '../data-derivers/useSplitUsersToMeAndOpponents.ts';
 import { useKickUser } from '../actions/useKickUser.ts';
+import { useChangeUsernameAndColor } from '../actions/useChangeUsernameAndColor.ts';
 
 export interface DomainWithoutStartingProviderProps {
 	children: ReactNode;
@@ -26,6 +27,7 @@ export function DomainWithoutStartingProvider(props: DomainWithoutStartingProvid
 	const setStartingMoney = useSetStartingMoney(session);
 	const setPresets = useSetPresets(session);
 	const kickUser = useKickUser(session);
+	const changeUsernameAndColor = useChangeUsernameAndColor(session, me);
 
 	const asBanker: DomainWithoutStarting['asBanker'] = me.isAlsoBanker
 		? {
@@ -43,6 +45,7 @@ export function DomainWithoutStartingProvider(props: DomainWithoutStartingProvid
 		me,
 		opponents,
 		asBanker,
+		changeUsernameAndColor
 	};
 
 	return (

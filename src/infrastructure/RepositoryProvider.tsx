@@ -12,6 +12,7 @@ import { type ReactNode, useMemo } from 'react';
 import { useFirebaseApp } from './firebase/util/useFirebaseApp.ts';
 import { useUser } from './firebase/util/useUser.ts';
 import { removeUserFromSession } from './firebase/removeUserFromSession.ts';
+import { changeUserInfo } from './firebase/changeUserInfo.ts';
 
 export function RepositoryProvider({ children }: { children: ReactNode }) {
 	const { database, auth } = useFirebaseApp();
@@ -29,7 +30,8 @@ export function RepositoryProvider({ children }: { children: ReactNode }) {
 		selectUserCountOnce: selectUserCountOnce(database),
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useSelectSession: useSelectSession(database),
-		removeUserFromSession: removeUserFromSession(database)
+		removeUserFromSession: removeUserFromSession(database),
+		changeUserInfo: changeUserInfo(database)
 	}), [database, user]);
 
 	if (repository.userId === '') {

@@ -25,7 +25,12 @@
 - ✅ [Technical item] - Refactor domain so that all actions are separate hooks to avoid code duplication
 - ✅ [Technical item] - Refactor domain so that all data queries are separate hooks to avoid code duplication
 - ✅ [Story] - In the lobby banker can kick users
-- 🔵 [Story] - user can change their username and color in the lobby
+- ✅ [Story] - user can change their username and color in the lobby
+- 🔵 [Technical item] - Have consistent namig for screens, both in UI and in Domain:
+  - Home
+  - Login
+  - Lobby
+  - Match
 - 🔵 [Story] - In transfer modal hide description field under button, so that without clicking it, clicking "next" on the keyboard will submit the form
 - 🔵 [Story] - As a user I want to view last transaction of mine below balance
 - 🔵 [Bug] - When money is sent to all users, only last user has sound notification.

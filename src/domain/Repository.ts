@@ -20,6 +20,7 @@ export interface Repository {
 	selectUserCountOnce(sessionId: string): Promise<number>;
 	useSelectSession(sessionId: string | null): Session | null;
 	removeUserFromSession(sessionId: string, userId: string): Promise<void>;
+	changeUserInfo(sessionId: string, userId: string, name: string, color: UserColor): Promise<void>;
 }
 
 export const RepositoryContext = createContext<Repository | null>(null);

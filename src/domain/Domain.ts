@@ -24,6 +24,7 @@ export interface DomainWithoutStarting {
 	me: User;
 	opponents: User[];
 	joinLink: string;
+	changeUsernameAndColor: (name: string, color: UserColor) => void;
 	asBanker: null | {
 		startGame: () => void;
 		startingMoney: number | null;
