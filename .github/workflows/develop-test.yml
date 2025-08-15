@@ -40,6 +40,9 @@ jobs:
       - name: Install Playwright browsers
         run: yarn playwright install --with-deps
 
+      - name: Lint code
+        run: yarn eslint
+
       - name: Start emulator
         run: |
           yarn dev:e2e &
