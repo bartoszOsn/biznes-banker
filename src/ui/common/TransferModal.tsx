@@ -13,6 +13,8 @@ export interface TransferModalProps {
 }
 
 export function TransferModal(props: TransferModalProps) {
+	const { onTransfer } = props;
+
 	const [opened, {open, close}] = useDisclosure(false);
 	const [amount, setAmount] = useState<number | undefined>(undefined);
 	const [description, setDescription] = useState<string>('');
@@ -33,9 +35,9 @@ export function TransferModal(props: TransferModalProps) {
 			return;
 		}
 
-		props.onTransfer(customAmount, description);
+		onTransfer(customAmount, description);
 		onClose();
-	}, [props.onTransfer, onClose]);
+	}, [onTransfer, onClose]);
 
 	const validate = (amount?: number) => {
 		if (amount === undefined || amount <= 0) {

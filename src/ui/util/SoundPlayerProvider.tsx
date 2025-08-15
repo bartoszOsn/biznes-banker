@@ -66,6 +66,7 @@ export function SoundPlayerProvider({ children }: { children: ReactNode}): React
 	);
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useSoundPlayer() {
 	return useContext(SoundPlayerContext);
 }

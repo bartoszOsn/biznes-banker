@@ -40,13 +40,16 @@ jobs:
       - name: Install Playwright browsers
         run: yarn playwright install --with-deps
 
+      - name: Lint code
+        run: yarn eslint
+
       - name: Start emulator
         run: |
           yarn dev:e2e &
           sleep 10
 
       - name: Run E2E tests
-        run: yarn playwright test --config=playwright.config.ts --output=playwright-report
+        run: yarn playwright test --config=playwright.config.ts --reporter=github --output=playwright-report
         env:
           CI: true
 
