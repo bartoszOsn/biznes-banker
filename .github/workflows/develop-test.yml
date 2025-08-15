@@ -31,6 +31,7 @@ jobs:
         run: |
           corepack enable
           corepack prepare yarn@3.8.5 --activate
+          yarn config set nodeLinker node-modules
           yarn -v
 
       - name: Install dependencies
