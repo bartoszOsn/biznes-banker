@@ -2,7 +2,8 @@ import { Browser, BrowserContext, LaunchOptions, Page, test, } from '@playwright
 import { UserDevice, userDeviceToBrowserType, userDeviceToDeviceDescriptor } from './UserDevice';
 
 export abstract class UserManager {
-	abstract create(device: UserDevice): Promise<UserContext>
+	abstract create(device: UserDevice): Promise<UserContext>;
+	abstract forEach(callback: (page: Page, browserContext: BrowserContext, browser: Browser) => Promise<void>): Promise<void>;
 }
 
 export interface UserContext {
@@ -25,6 +26,12 @@ export class UserManagerImpl extends UserManager {
 			return context;
 		});
     }
+
+	async forEach(callback: (page: Page, browserContext: BrowserContext, browser: Browser) => Promise<void>): Promise<void> {
+		for (const context of this.contexts) {
+			await callback(context.page, context.browserContext, context.browser);
+		}
+	}
 
 	async dispose(): Promise<void> {
 		for (const context of this.contexts) {

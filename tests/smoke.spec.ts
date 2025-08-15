@@ -2,7 +2,16 @@ import { test } from './fixtures/test';
 import { UserDevice } from './fixtures/UserDevice';
 import { expect } from '@playwright/test';
 import { expectLoginPageVisible } from './util/login/expectLoginPageVisible';
-import { clickNextButton } from './util/login/clickNextButton';
+import { getLoginNextButton } from './util/login/getLoginNextButton';
+import { goToHome } from './util/home/goToHome';
+import { getHomeStartSessionButton } from './util/home/getHomeStartSessionButton';
+import { expectLoginChooseNameLabelToBeShaking } from './util/login/expectLoginChooseNameLabelToBeShaking';
+import { expectLoginChooseColorLabelToBeShaking } from './util/login/expectLoginChooseColorLabelToBeShaking';
+import { getLoginNameTextbox } from './util/login/getLoginNameTextbox';
+import { expectLoginChooseNameLabelNotToBeShaking } from './util/login/expectLoginChooseNameLabelNotToBeShaking';
+import { expectLobbyPageVisible } from './util/lobby/expectLobbyPageVisible';
+import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
+import { expectMatchPageVisible } from './util/match/expectMatchPageVisible';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -11,28 +20,29 @@ test('Smoke test', async ({ users }) => {
 	const user4 = await users.create(UserDevice.SamsungGalaxyS24);
 
 	await test.step('User 1: Start session', async () => {
-		await user1.page.goto('/');
-		await user1.page.getByRole('button', { name: 'Start Session' }).click();
+		await goToHome(user1.page);
+		await getHomeStartSessionButton(user1.page).click();
 
 		await expectLoginPageVisible(user1.page);
 	});
 
 	await test.step('User 1: Login', async () => {
-		await clickNextButton(user1.page);
+		await getLoginNextButton(user1.page).click();
 
-		await expect(user1.page.getByText('Choose your name')).toHaveCSS('animation-name', 'shake');
-		await expect(user1.page.getByText('Select a color')).toHaveCSS('animation-name', 'shake');
+		await expectLoginChooseNameLabelToBeShaking(user1.page);
+		await expectLoginChooseColorLabelToBeShaking(user1.page);
 
-		await user1.page.getByRole('textbox').fill('User 1');
-		await clickNextButton(user1.page);
+		await getLoginNameTextbox(user1.page).fill('User 1');
+		await getLoginNextButton(user1.page).click();
 
-		await expect(user1.page.getByText('Select a color')).toHaveCSS('animation-name', 'shake');
-		await expect(user1.page.getByText('Choose your name')).not.toHaveCSS('animation-name', 'shake');
+		await expectLoginChooseColorLabelToBeShaking(user1.page);
+		await expectLoginChooseNameLabelNotToBeShaking(user1.page);
 
 		await user1.page.locator('button:nth-child(2)').click(); // TODO: add testIds to buttons
-		await clickNextButton(user1.page);
+		await getLoginNextButton(user1.page).click();
 
-		await expect(user1.page.getByText('Waiting for other players')).toBeVisible();
+		await expectLobbyPageVisible(user1.page);
+		await expectLobbyToHaveUsers(user1.page, ['User 1']);
 	});
 
 	const joinSessionLink = await test.step('copy join session link', async () => {
@@ -50,11 +60,12 @@ test('Smoke test', async ({ users }) => {
 
 		await expectLoginPageVisible(user2.page);
 
-		await user2.page.getByRole('textbox').fill('User 2');
+		await getLoginNameTextbox(user2.page).fill('User 2');
 		await user2.page.locator('button:nth-child(7)').click(); // TODO: add testIds to buttons
-		await clickNextButton(user2.page);
+		await getLoginNextButton(user2.page).click();
 
-		await expect(user2.page.getByText('Waiting for other players')).toBeVisible();
+		await expectLobbyPageVisible(user2.page);
+		await expectLobbyToHaveUsers(user2.page, ['User 1', 'User 2']);
 	});
 
 	await test.step('User 3: Join session and login', async () => {
@@ -62,11 +73,12 @@ test('Smoke test', async ({ users }) => {
 
 		await expectLoginPageVisible(user3.page);
 
-		await user3.page.getByRole('textbox').fill('User 3');
+		await getLoginNameTextbox(user3.page).fill('User 3');
 		await user3.page.locator('button:nth-child(8)').click(); // TODO: add testIds to buttons
-		await clickNextButton(user3.page);
+		await getLoginNextButton(user3.page).click();
 
-		await expect(user3.page.getByText('Waiting for other players')).toBeVisible();
+		await expectLobbyPageVisible(user3.page);
+		await expectLobbyToHaveUsers(user3.page, ['User 1', 'User 2', 'User 3']);
 	});
 
 	await test.step('User 4: Join session and login', async () => {
@@ -74,24 +86,17 @@ test('Smoke test', async ({ users }) => {
 
 		await expectLoginPageVisible(user4.page);
 
-		await user4.page.getByRole('textbox').fill('User 4');
+		await getLoginNameTextbox(user4.page).fill('User 4');
 		await user4.page.locator('button:nth-child(3)').click(); // TODO: add testIds to buttons
-		await clickNextButton(user4.page);
+		await getLoginNextButton(user4.page).click();
 
-		await expect(user4.page.getByText('Waiting for other players')).toBeVisible();
-
-		await expect(user4.page.getByText('User 1')).toBeVisible();
-		await expect(user4.page.getByText('User 2')).toBeVisible();
-		await expect(user4.page.getByText('User 3')).toBeVisible();
-		await expect(user4.page.getByText('User 4')).toBeVisible();
+		await expectLobbyPageVisible(user4.page);
+		await users.forEach(page => expectLobbyToHaveUsers(page, ['User 1', 'User 2', 'User 3', 'User 4']));
 	});
 
 	await test.step('Start game', async () => {
 		await user1.page.getByRole('button', { name: 'Play' }).click();
 
-		await expect(user1.page.locator('.mantine-AppShell-root')).toBeVisible();
-		await expect(user2.page.locator('.mantine-AppShell-root')).toBeVisible();
-		await expect(user3.page.locator('.mantine-AppShell-root')).toBeVisible();
-		await expect(user4.page.locator('.mantine-AppShell-root')).toBeVisible();
+		await users.forEach(page => expectMatchPageVisible(page));
 	})
 })
