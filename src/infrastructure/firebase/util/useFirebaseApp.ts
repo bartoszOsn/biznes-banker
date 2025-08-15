@@ -5,13 +5,13 @@ import { useOnce, useOnceEffect } from '../../../util/useOnce.ts';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-	apiKey: "AIzaSyBIiUgI3piABMMCbNbVwQrS8bzd6PR14cY",
-	authDomain: "biznes-banker.firebaseapp.com",
-	projectId: "biznes-banker",
-	storageBucket: "biznes-banker.firebasestorage.app",
-	messagingSenderId: "691425387120",
-	appId: "1:691425387120:web:93ca7e987c336faacc0ab5",
-	databaseURL: "https://biznes-banker-default-rtdb.europe-west1.firebasedatabase.app"
+	apiKey: import.meta.env.FIREBASE_API_KEY,
+	authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
+	projectId: import.meta.env.FIREBASE_PROJECT_ID,
+	storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
+	messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID,
+	appId: import.meta.env.FIREBASE_APP_ID,
+	databaseURL: import.meta.env.FIREBASE_DATABASE_URL
 };
 
 export function useFirebaseApp() {
