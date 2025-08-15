@@ -57,5 +57,5 @@ function useSoundEffectOnMoney(domain: MainDomain): void {
 		if (lastTransaction && lastTransaction.toUserId === domain.me.id) {
 			playMoneySound();
 		}
-	}, [lastTransaction?.toUserId, lastTransaction?.timestamp, domain.me.id]);
+	}, [lastTransaction.toUserId, lastTransaction.timestamp, domain.me.id, lastTransaction, playMoneySound]);
 }

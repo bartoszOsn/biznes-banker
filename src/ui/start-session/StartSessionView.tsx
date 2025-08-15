@@ -11,7 +11,7 @@ export function StartSessionView() {
 	const onStartSessionClick = useCallback(() => {
 		fireMoneyConfetti();
 		domain.startSession();
-	}, [domain.startSession]);
+	}, [domain]);
 
 	return (
 		<Box style={{

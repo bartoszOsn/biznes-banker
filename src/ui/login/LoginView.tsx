@@ -31,7 +31,7 @@ export function LoginView() {
 
 		fireMoneyConfetti();
 		domain.setUserProps(name, color);
-	}, [name, color, domain.setUserProps]);
+	}, [name, color, domain, triggerShakeName, triggerShakeColor]);
 
 	return (
 		<Box style={{
