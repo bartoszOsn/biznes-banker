@@ -43,7 +43,7 @@ export function ScreenTransition({ children, transitionDuration = 300 }: ScreenT
 		}, transitionDuration);
 
 		return () => clearTimeout(timeout);
-	}, [...Children.toArray(children).map((child: any) => child?.key)]);
+	}, [transitionDuration, ...Children.toArray(children).map((child: unknown | { key?: string }) => child && typeof child === 'object' && 'key' in child && child.key)]);
 
 	return (
 		<>

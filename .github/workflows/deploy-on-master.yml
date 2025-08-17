@@ -1,0 +1,60 @@
+name: Deploy Firebase on master
+
+on:
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: read
+  id-token: write   # for workload identity auth (optional if you use service account key)
+
+env:
+  FIREBASE_API_KEY: ${{secrets.FIREBASE_API_KEY}}
+  FIREBASE_AUTH_DOMAIN: ${{secrets.FIREBASE_AUTH_DOMAIN}}
+  FIREBASE_PROJECT_ID: ${{secrets.FIREBASE_PROJECT_ID}}
+  FIREBASE_STORAGE_BUCKET: ${{secrets.FIREBASE_STORAGE_BUCKET}}
+  FIREBASE_MESSAGING_SENDER_ID: ${{secrets.FIREBASE_MESSAGING_SENDER_ID}}
+  FIREBASE_APP_ID: ${{secrets.FIREBASE_APP_ID}}
+  FIREBASE_DATABASE_URL: ${{secrets.FIREBASE_DATABASE_URL}}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack (Yarn Berry)
+        run: |
+          corepack enable
+          corepack prepare yarn@3.8.5 --activate
+          yarn config set nodeLinker node-modules
+          yarn -v
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build the project
+        run: yarn build
+
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          yarn firebase deploy \
+            --project "$FIREBASE_PROJECT_ID"
+
+      - name: Add release tag
+        run: |
+          git tag "release-$(date +'%Y%m%d%H%M%S')"
+          git push origin --tags
+
+      - name: Notify deployment
+        run: echo "Deployment completed successfully!"

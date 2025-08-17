@@ -7,7 +7,8 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"build:emulator": "tsc -b && vite build --mode emulator",
-		"dev:e2e": "yarn build:emulator && yarn firebase emulators:start",
+		"e2e:ci": "yarn firebase emulators:exec \"yarn build:emulator && yarn playwright test --config=playwright.config.ts --reporter=github --output=playwright-report\"",
+		"e2e:ui": "yarn firebase emulators:exec \"yarn build:emulator && yarn playwright test --ui\"",
 		"deploy": "yarn build && firebase deploy",
 		"lint": "eslint .",
 		"preview": "vite preview"

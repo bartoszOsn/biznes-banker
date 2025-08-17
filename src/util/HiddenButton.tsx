@@ -18,7 +18,7 @@ export function HiddenButton<C = 'button'>(props: Omit<ComponentProps<typeof Uns
 	}
 
 	return (
-		<UnstyledButton {...props as any} style={styleObj}>
+		<UnstyledButton {...props as Record<never, unknown>} style={styleObj}>
 			<Center w="100%" h="100%" c='dark'>
 				<IconEyeOff size="48"/>
 			</Center>

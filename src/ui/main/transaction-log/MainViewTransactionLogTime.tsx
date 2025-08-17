@@ -45,7 +45,7 @@ function useTransactionColor(timestamp: number, target: string = 'var(--mantine-
 			clearInterval(intervalId);
 			clearTimeout(cleanupTimeout);
 		};
-	}, [timestamp]);
+	}, [target, timestamp]);
 
 	return color;
 }

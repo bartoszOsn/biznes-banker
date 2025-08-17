@@ -1,0 +1,23 @@
+name: PR gate to master
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  only-develop-to-master:
+    name: Only allow PRs from develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if source branch is not develop
+        run: |
+          echo "Base: ${{ github.base_ref }}"
+          echo "Head: ${{ github.head_ref }}"
+          if [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "::error::PRs to master must come from 'develop'. Current head: '${{ github.head_ref }}'"
+            exit 1
+          fi

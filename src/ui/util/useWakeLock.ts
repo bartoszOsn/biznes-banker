@@ -9,7 +9,7 @@ export function useWakeLock() {
 		async function requestWakeLock() {
 			try {
 				if (isSupported) {
-					wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+					wakeLockRef.current = await navigator.wakeLock.request('screen');
 
 					// Re-request wake lock on visibility change (e.g., when tab is hidden then shown again)
 					document.addEventListener('visibilitychange', handleVisibilityChange);
