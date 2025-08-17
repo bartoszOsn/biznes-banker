@@ -9,8 +9,13 @@ permissions:
   id-token: write   # for workload identity auth (optional if you use service account key)
 
 env:
-  # Set your project ID here or as a secret
-  FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+  FIREBASE_API_KEY: ${{secrets.FIREBASE_API_KEY}}
+  FIREBASE_AUTH_DOMAIN: ${{secrets.FIREBASE_AUTH_DOMAIN}}
+  FIREBASE_PROJECT_ID: ${{secrets.FIREBASE_PROJECT_ID}}
+  FIREBASE_STORAGE_BUCKET: ${{secrets.FIREBASE_STORAGE_BUCKET}}
+  FIREBASE_MESSAGING_SENDER_ID: ${{secrets.FIREBASE_MESSAGING_SENDER_ID}}
+  FIREBASE_APP_ID: ${{secrets.FIREBASE_APP_ID}}
+  FIREBASE_DATABASE_URL: ${{secrets.FIREBASE_DATABASE_URL}}
 
 jobs:
   deploy:
@@ -35,11 +40,13 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      # Deploy what you need:
-      # hosting, firestore rules, realtime db rules, functions, storage rules, etc.
+      - name: Build the project
+        run: yarn build
+
       - name: Deploy to Firebase
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
           yarn firebase deploy \
             --project "$FIREBASE_PROJECT_ID"
