@@ -50,3 +50,11 @@ jobs:
         run: |
           yarn firebase deploy \
             --project "$FIREBASE_PROJECT_ID"
+
+      - name: Add release tag
+        run: |
+          git tag "release-$(date +'%Y%m%d%H%M%S')"
+          git push origin --tags
+
+      - name: Notify deployment
+        run: echo "Deployment completed successfully!"
