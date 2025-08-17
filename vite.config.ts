@@ -4,7 +4,8 @@ import { networkInterfaces } from 'os';
 
 const env = loadEnv(process.env.NODE_ENV ?? '', process.cwd(), '');
 
-if (!env.FIREBASE_AUTH_DOMAIN ||
+if (!env.FIREBASE_API_KEY ||
+	!env.FIREBASE_AUTH_DOMAIN ||
 	!env.FIREBASE_PROJECT_ID ||
 	!env.FIREBASE_STORAGE_BUCKET ||
 	!env.FIREBASE_MESSAGING_SENDER_ID ||
