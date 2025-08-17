@@ -24,7 +24,7 @@ test('Smoke test', async ({ users }) => {
 		await getHomeStartSessionButton(user1.page).click();
 
 		await expectLoginPageVisible(user1.page);
-	}, { timeout: 120000 });
+	});
 
 	await test.step('User 1: Login', async () => {
 		await getLoginNextButton(user1.page).click();

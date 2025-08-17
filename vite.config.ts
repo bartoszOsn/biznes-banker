@@ -4,6 +4,17 @@ import { networkInterfaces } from 'os';
 
 const env = loadEnv(process.env.NODE_ENV ?? '', process.cwd(), '');
 
+if (!env.FIREBASE_API_KEY ||
+	!env.FIREBASE_AUTH_DOMAIN ||
+	!env.FIREBASE_PROJECT_ID ||
+	!env.FIREBASE_STORAGE_BUCKET ||
+	!env.FIREBASE_MESSAGING_SENDER_ID ||
+	!env.FIREBASE_APP_ID ||
+	!env.FIREBASE_DATABASE_URL) {
+	console.error('Missing Firebase environment variables. Please check your .env file.');
+	process.exit(1);
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
 	let emulatorUrl = '';
