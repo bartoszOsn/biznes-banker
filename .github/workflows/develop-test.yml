@@ -44,6 +44,8 @@ jobs:
         run: yarn eslint
 
       - name: Run E2E tests
+        env:
+          CI: true
         run: yarn e2e:ci
 
       - name: Upload Playwright report
