@@ -1,5 +1,6 @@
 import { expect, Page } from '@playwright/test';
+import { getMatchHideMoneyButton } from './getMatchHideMoneyButton';
 
 export async function expectMatchMoneyToBe(amount: string, page: Page) {
-  await expect(page.getByRole('button', { name: 'Click to hide' })).toContainText(amount);
+  await expect(getMatchHideMoneyButton(page)).toContainText(amount);
 }

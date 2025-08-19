@@ -17,6 +17,10 @@ import { expectMatchMoneyToBe } from './util/match/expectMatchMoneyToBe';
 import { getLoginSelectMoneyPresetsButton } from './util/login/getLoginSelectMoneyPresetsButton';
 import { getLoginMoneyOnStartTextbox } from './util/login/getLoginMoneyOnStartTextbox';
 import { getLoginSelectMoneyPresetsSaveButton } from './util/login/getLoginSelectMoneyPresetsSaveButton';
+import { getMatchHideMoneyButton } from './util/match/getMatchHideMoneyButton';
+import { getMatchTransferButtonToUser } from './util/match/getMatchTransferButtonToUser';
+import { getMatchTransferAmountTextbox } from './util/match/getMatchTransferAmountTextbox';
+import { getMatchTransferTransferButton } from './util/match/getMatchTransferTransferButton';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -115,6 +119,21 @@ test('Smoke test', async ({ users }) => {
 		await users.forEach(async (page) => {
 			await getMatchRevealMoneyButton(page).click();
 			await expectMatchMoneyToBe('$100', page);
+			await getMatchHideMoneyButton(page).click();
 		});
+	});
+
+	await test.step('user 1: transfer $20 to user 2', async () => {
+		await getMatchTransferButtonToUser('User 2', user1.page).click();
+		await getMatchTransferAmountTextbox(user1.page).fill('20');
+		await getMatchTransferTransferButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user1.page).click();
+		await expectMatchMoneyToBe('$80', user1.page);
+		await getMatchHideMoneyButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user2.page).click();
+		await expectMatchMoneyToBe('$120', user2.page);
+		await getMatchHideMoneyButton(user2.page).click();
 	})
 })
