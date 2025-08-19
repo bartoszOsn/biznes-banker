@@ -17,11 +17,15 @@ export function UserColorPicker(props: UserColorPickerProps) {
 			{
 				colorValues.map((color) => (
 					<UnstyledButton onClick={() => props.onChange?.(color)} key={color}>
-						<ColorSwatch color={userColorToMantineVar(color)} c={color === 'white' ? 'var(--mantine-color-gray-7)' : 'var(--mantine-color-gray-2)'} withShadow={true} style={{ cursor: 'pointer'}}>
-						{
-							props.value === color && <CheckIcon size={16} />
-						}
-							</ColorSwatch>
+						<ColorSwatch color={userColorToMantineVar(color)}
+									 c={color === 'white' ? 'var(--mantine-color-gray-7)' : 'var(--mantine-color-gray-2)'}
+									 withShadow={true}
+									 aria-label={color}
+									 style={{cursor: 'pointer'}}>
+							{
+								props.value === color && <CheckIcon size={16}/>
+							}
+						</ColorSwatch>
 					</UnstyledButton>
 				))
 			}
