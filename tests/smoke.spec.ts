@@ -12,6 +12,8 @@ import { expectLoginChooseNameLabelNotToBeShaking } from './util/login/expectLog
 import { expectLobbyPageVisible } from './util/lobby/expectLobbyPageVisible';
 import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
 import { expectMatchPageVisible } from './util/match/expectMatchPageVisible';
+import { getMatchRevealMoneyButton } from './util/match/getMatchRevealMoneyButton';
+import { expectMatchMoneyToBe } from './util/match/expectMatchMoneyToBe';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -98,5 +100,12 @@ test('Smoke test', async ({ users }) => {
 		await user1.page.getByRole('button', { name: 'Play' }).click();
 
 		await users.forEach(page => expectMatchPageVisible(page));
+	});
+
+	await test.step('View money amount for each user', async () => {
+		await users.forEach(async (page) => {
+			await getMatchRevealMoneyButton(page).click();
+			await expectMatchMoneyToBe('$0', page);
+		});
 	})
 })
