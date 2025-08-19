@@ -21,6 +21,8 @@ import { getMatchHideMoneyButton } from './util/match/getMatchHideMoneyButton';
 import { getMatchTransferButtonToUser } from './util/match/getMatchTransferButtonToUser';
 import { getMatchTransferAmountTextbox } from './util/match/getMatchTransferAmountTextbox';
 import { getMatchTransferTransferButton } from './util/match/getMatchTransferTransferButton';
+import { getMatchBankerTabButton } from './util/match/getMatchBankerTabButton';
+import { getMatchUserTabButton } from './util/match/getMatchUserTabButton';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -135,5 +137,33 @@ test('Smoke test', async ({ users }) => {
 		await getMatchRevealMoneyButton(user2.page).click();
 		await expectMatchMoneyToBe('$120', user2.page);
 		await getMatchHideMoneyButton(user2.page).click();
-	})
+	});
+
+	await test.step('user 2: transfer $30 to banker', async () => {
+		await getMatchTransferButtonToUser('Banker', user2.page).click();
+		await getMatchTransferAmountTextbox(user2.page).fill('30');
+		await getMatchTransferTransferButton(user2.page).click();
+
+		await getMatchRevealMoneyButton(user2.page).click();
+		await expectMatchMoneyToBe('$90', user2.page);
+		await getMatchHideMoneyButton(user2.page).click();
+	});
+
+	await test.step('user 1: transfer $10 to user 3 as banker', async () => {
+		await getMatchBankerTabButton(user1.page).click();
+
+		await getMatchTransferButtonToUser('User 3', user1.page).click();
+		await getMatchTransferAmountTextbox(user1.page).fill('10');
+		await getMatchTransferTransferButton(user1.page).click();
+
+		await getMatchUserTabButton('User 1', user1.page).click();
+
+		await getMatchRevealMoneyButton(user1.page).click();
+		await expectMatchMoneyToBe('$80', user1.page);
+		await getMatchHideMoneyButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user3.page).click();
+		await expectMatchMoneyToBe('$110', user3.page);
+		await getMatchHideMoneyButton(user3.page).click();
+	});
 })
