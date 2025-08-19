@@ -14,6 +14,9 @@ import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
 import { expectMatchPageVisible } from './util/match/expectMatchPageVisible';
 import { getMatchRevealMoneyButton } from './util/match/getMatchRevealMoneyButton';
 import { expectMatchMoneyToBe } from './util/match/expectMatchMoneyToBe';
+import { getLoginSelectMoneyPresetsButton } from './util/login/getLoginSelectMoneyPresetsButton';
+import { getLoginMoneyOnStartTextbox } from './util/login/getLoginMoneyOnStartTextbox';
+import { getLoginSelectMoneyPresetsSaveButton } from './util/login/getLoginSelectMoneyPresetsSaveButton';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -96,7 +99,13 @@ test('Smoke test', async ({ users }) => {
 		await users.forEach(page => expectLobbyToHaveUsers(page, ['User 1', 'User 2', 'User 3', 'User 4']));
 	});
 
-	await test.step('Start game', async () => {
+	await test.step('User 1: Setup $100 as starting money', async () => {
+		await getLoginSelectMoneyPresetsButton(user1.page).click();
+		await getLoginMoneyOnStartTextbox(user1.page).fill('100');
+		await getLoginSelectMoneyPresetsSaveButton(user1.page).click();
+	});
+
+	await test.step('user 1: Start game', async () => {
 		await user1.page.getByRole('button', { name: 'Play' }).click();
 
 		await users.forEach(page => expectMatchPageVisible(page));
@@ -105,7 +114,7 @@ test('Smoke test', async ({ users }) => {
 	await test.step('View money amount for each user', async () => {
 		await users.forEach(async (page) => {
 			await getMatchRevealMoneyButton(page).click();
-			await expectMatchMoneyToBe('$0', page);
+			await expectMatchMoneyToBe('$100', page);
 		});
 	})
 })
