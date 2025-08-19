@@ -22,8 +22,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tests:
-    name: tests
+  develop-tests:
+    name: develop-tests
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
 
