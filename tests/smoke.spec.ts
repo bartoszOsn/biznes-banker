@@ -112,7 +112,7 @@ test('Smoke test', async ({ users }) => {
 		await getLoginSelectMoneyPresetsSaveButton(user1.page).click();
 	});
 
-	await test.step('user 1: Start game', async () => {
+	await test.step('User 1: Start game', async () => {
 		await user1.page.getByRole('button', { name: 'Play' }).click();
 
 		await users.forEach(page => expectMatchPageVisible(page));
