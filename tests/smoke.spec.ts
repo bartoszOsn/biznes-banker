@@ -23,6 +23,7 @@ import { getMatchTransferAmountTextbox } from './util/match/getMatchTransferAmou
 import { getMatchTransferTransferButton } from './util/match/getMatchTransferTransferButton';
 import { getMatchBankerTabButton } from './util/match/getMatchBankerTabButton';
 import { getMatchUserTabButton } from './util/match/getMatchUserTabButton';
+import { getLoginColorButton } from './util/login/getLoginColorButton';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -49,7 +50,7 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginChooseColorLabelToBeShaking(user1.page);
 		await expectLoginChooseNameLabelNotToBeShaking(user1.page);
 
-		await user1.page.locator('button:nth-child(2)').click(); // TODO: add testIds to buttons
+		await getLoginColorButton('blue', user1.page).click();
 		await getLoginNextButton(user1.page).click();
 
 		await expectLobbyPageVisible(user1.page);
@@ -72,7 +73,7 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user2.page);
 
 		await getLoginNameTextbox(user2.page).fill('User 2');
-		await user2.page.locator('button:nth-child(7)').click(); // TODO: add testIds to buttons
+		await getLoginColorButton('white', user2.page).click();
 		await getLoginNextButton(user2.page).click();
 
 		await expectLobbyPageVisible(user2.page);
@@ -85,7 +86,7 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user3.page);
 
 		await getLoginNameTextbox(user3.page).fill('User 3');
-		await user3.page.locator('button:nth-child(8)').click(); // TODO: add testIds to buttons
+		await getLoginColorButton('black', user3.page).click();
 		await getLoginNextButton(user3.page).click();
 
 		await expectLobbyPageVisible(user3.page);
@@ -98,7 +99,7 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user4.page);
 
 		await getLoginNameTextbox(user4.page).fill('User 4');
-		await user4.page.locator('button:nth-child(3)').click(); // TODO: add testIds to buttons
+		await getLoginColorButton('green', user4.page).click();
 		await getLoginNextButton(user4.page).click();
 
 		await expectLobbyPageVisible(user4.page);
@@ -166,4 +167,4 @@ test('Smoke test', async ({ users }) => {
 		await expectMatchMoneyToBe('$110', user3.page);
 		await getMatchHideMoneyButton(user3.page).click();
 	});
-})
+});
