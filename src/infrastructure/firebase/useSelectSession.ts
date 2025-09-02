@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { type Database, onValue, ref } from 'firebase/database';
 import type { SessionDTO } from './SessionDTO.ts';
 import { sessionDTOToSession } from './sessionDTOToSession.ts';
+import { updateWithSharing } from '../../util/updateWithSharing.ts';
 
 export const useSelectSession = (db: Database) => (sessionId: string | null): Session | null => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [session, setSession] = useState<SessionDTO | null>(null);
+	const [session, setSession] = useState<Session | null>(null);
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
@@ -19,7 +20,8 @@ export const useSelectSession = (db: Database) => (sessionId: string | null): Se
 		const unsubscribe = onValue(sessionRef, snapshot => {
 			const data = snapshot.val();
 			if (data) {
-				setSession(data as SessionDTO);
+				const session = sessionDTOToSession(sessionId, data as SessionDTO)
+				setSession(prev => updateWithSharing(prev, session));
 			} else {
 				setSession(null);
 			}
@@ -28,5 +30,5 @@ export const useSelectSession = (db: Database) => (sessionId: string | null): Se
 		return unsubscribe;
 	}, [sessionId]);
 
-	return session === null || sessionId === null ? null : sessionDTOToSession(sessionId, session);
+	return sessionId === null ? null : session;
 };
