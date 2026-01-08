@@ -5,7 +5,6 @@ import { IconCheck, IconCopy, IconCurrencyDollar, IconX } from '@tabler/icons-re
 import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { type ReactNode, useCallback } from 'react';
-import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
 import { SelectMoneyPresetsButton } from './SelectMoneyPresetsButton.tsx';
 import { ChangeUsernameAndColorButton } from './ChangeUsernameAndColorButton.tsx';
 
@@ -14,7 +13,6 @@ export function WaitForUsersView() {
 
 	const onPlay = useCallback(() => {
 		if (domain.asBanker) {
-			fireMoneyConfetti();
 			domain.asBanker.startGame();
 		}
 	}, [domain.asBanker]);

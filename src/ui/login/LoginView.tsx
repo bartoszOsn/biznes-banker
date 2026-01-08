@@ -5,7 +5,6 @@ import dollarGrid from '../../assets/dollar-grid.webp';
 import capitalist from '../../assets/capitalist.svg';
 import { useCallback, useMemo, useState } from 'react';
 import { UserColorPicker } from '../common/UserColorPicker.tsx';
-import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
 import { useShake } from '../../util/useShake.ts';
 
 export function LoginView() {
@@ -29,7 +28,6 @@ export function LoginView() {
 			return;
 		}
 
-		fireMoneyConfetti();
 		domain.setUserProps(name, color);
 	}, [name, color, domain, triggerShakeName, triggerShakeColor]);
 
