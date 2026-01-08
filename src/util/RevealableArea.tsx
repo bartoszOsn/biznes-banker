@@ -21,7 +21,6 @@ export function RevealableArea(props: RevealableAreaProps) {
 		...unstyledButtonProps.style,
 		display: 'flex',
 		flexDirection: 'column',
-		flexGrow: 1,
 		paddingTop: theme.spacing.xl,
 		alignItems: 'center',
 		width: '100%'
