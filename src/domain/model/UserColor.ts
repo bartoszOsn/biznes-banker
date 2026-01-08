@@ -26,7 +26,7 @@ export function userColorToMantine(color: UserColor): MantineColor {
 		case UserColor.PINK:
 			return `pink`;
 		case UserColor.WHITE:
-			return 'gray';
+			return 'gray'; // TODO: return 'white';
 		case UserColor.BLACK:
 			return 'dark';
 		default:
