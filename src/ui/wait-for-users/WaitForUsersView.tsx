@@ -1,12 +1,12 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { ActionIcon, Box, Button, Card, ColorSwatch, CopyButton, Group, Stack, Text, TextInput, Title } from '@mantine/core';
-import dollarGrid from '../../assets/dollar-grid.webp';
-import { IconCheck, IconCopy, IconCurrencyDollar, IconX } from '@tabler/icons-react';
+import { ActionIcon, Button, Card, ColorSwatch, Stack, Table, Text, Title } from '@mantine/core';
+import { IconBuildingBank, IconX } from '@tabler/icons-react';
 import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
 import { type ReactNode, useCallback } from 'react';
 import { SelectMoneyPresetsButton } from './SelectMoneyPresetsButton.tsx';
 import { ChangeUsernameAndColorButton } from './ChangeUsernameAndColorButton.tsx';
+import { CopyableQR } from '../util/CopyableQR.tsx';
 
 export function WaitForUsersView() {
 	const domain = useDomainOfType('withoutStarting');
@@ -18,87 +18,79 @@ export function WaitForUsersView() {
 	}, [domain.asBanker]);
 
 	return (
-		<Box style={{
-			background: 'linear-gradient(45deg,var(--mantine-color-grape-filled) 0%, var(--mantine-color-violet-filled) 100%)'
-		}}>
-			<Box style={{
-				backgroundImage: `url(${dollarGrid})`,
-				backgroundSize: '140px 140px',
-				backgroundRepeat: 'repeat'
-			}}>
-				<Stack w={'100%'}
-					   h={'100vh'}
-					   px={16}
-					   pt={16}
-					   gap={32}
-					   align={'center'}>
-					<Title c="white" style={{textTransform: 'uppercase', textAlign: 'center'}} size={'sm'}>Waiting for other players</Title>
-					<Card w={'100%'}>
-						<Text size="xs" style={{textAlign: 'center'}}>Share this link with them</Text>
-						<TextInput value={domain.joinLink} readOnly rightSection={(
-							<CopyButton value={domain.joinLink}>
-								{
-									({copied, copy}) => (
-										<ActionIcon variant="light" color={copied ? 'green' : 'blue'} onClick={copy} title={copied ? 'Copied!' : 'Copy link'}>
-											{copied ? <IconCheck/> : <IconCopy/>}
-										</ActionIcon>
-									)
-								}
-							</CopyButton>
-						)}/>
-					</Card>
-					<Card w='100%'>
-						<Stack gap={8} w='100%' align='center'>
-							{
-								domain.me && (
-									<UserIndicator user={domain.me}
-												   isMe={true}>
-										<ChangeUsernameAndColorButton />
-									</UserIndicator>
-								)
-							}
-							{
-								domain.opponents.map((user) => (
-									<UserIndicator key={user.id}
-												   user={user}
-												   isMe={false}>
-										{
-											domain.asBanker && (
-												<ActionIcon variant="subtle" color="red" title="Kick user" style={{ alignSelf: 'end' }} onClick={() => domain.asBanker?.kickUser(user)}>
-													<IconX size={18} />
-												</ActionIcon>
-											)
-										}
-									</UserIndicator>
-								))
-							}
-						</Stack>
-					</Card>
-					{
-						domain.asBanker && (
-							<Stack gap='xs' align='center'>
-								<Button variant={'gradient'} gradient={{from: 'red', to: 'pink', deg: 90}} onClick={onPlay}>Play</Button>
-								<SelectMoneyPresetsButton />
-							</Stack>
-						)
-					}
+		<Stack w={'100%'}
+			   mih={'100vh'}
+			   px={16}
+			   pt={64}
+			   pb={32}
+			   gap={32}
+			   bg="gray.0"
+			   align={'center'}>
+			<Title style={{textAlign: 'center'}}>Waiting for other players</Title>
+			<Card w={'100%'} withBorder>
+				<Title order={2} ta="center" mb="md">Let others scan to join</Title>
+				<Stack align="center">
+					<CopyableQR value={domain.joinLink}/>
 				</Stack>
-			</Box>
-		</Box>
+				<Text size="xs" style={{textAlign: 'center'}}>Or tap QR code to copy link</Text>
+			</Card>
+			<Card w="100%" withBorder>
+				<Title order={4} ta="center" mb="md">Already joined</Title>
+				<Table withRowBorders={false}>
+					<Table.Tbody>
+						{
+							domain.me && (
+								<UserRow user={domain.me} isMe={true}>
+									<ChangeUsernameAndColorButton/>
+								</UserRow>
+							)
+						}
+						{
+							domain.opponents.map((user) => (
+								<UserRow key={user.id} user={user} isMe={false}>
+									{
+										domain.asBanker && (
+											<ActionIcon variant="subtle" color="red" title="Kick user" style={{alignSelf: 'end'}}
+														onClick={() => domain.asBanker?.kickUser(user)}>
+												<IconX size={18}/>
+											</ActionIcon>
+										)
+									}
+								</UserRow>
+							))
+						}
+					</Table.Tbody>
+				</Table>
+			</Card>
+			{
+				domain.asBanker && (
+					<Button.Group w='100%'>
+						<Button fullWidth size="lg" onClick={onPlay}>Play</Button>
+						<SelectMoneyPresetsButton/>
+					</Button.Group>
+				)
+			}
+		</Stack>
 	)
 }
 
-function UserIndicator(props: { user: User, isMe: boolean, children?: ReactNode }) {
+function UserRow(props: { user: User, isMe: boolean, children?: ReactNode }) {
 	return (
-		<Group>
-			<ColorSwatch size={props.isMe ? 32 : 28} color={userColorToMantineVar(props.user.color)}>
+		<Table.Tr>
+			<Table.Td w='0px'>
+				<ColorSwatch size={8} color={userColorToMantineVar(props.user.color)}/>
+			</Table.Td>
+			<Table.Td w='0px'>
 				{
-					props.user.isAlsoBanker && <IconCurrencyDollar size={18} color={'white'} />
+					props.user.isAlsoBanker && <IconBuildingBank/>
 				}
-			</ColorSwatch>
-			<Text size={props.isMe ? 'xl' : 'md'} style={{fontWeight: props.isMe ? 'bold' : 'normal'}}>{props.user.name}</Text>
-			{ props.children }
-		</Group>
+			</Table.Td>
+			<Table.Td>
+				<Text size={'md'} style={{fontWeight: props.isMe ? 'bold' : 'normal', textOverflow: 'ellipsis', textWrap: 'nowrap'}}>{props.user.name}</Text>
+			</Table.Td>
+			<Table.Td w='0px'>
+				{props.children}
+			</Table.Td>
+		</Table.Tr>
 	);
-
 }
