@@ -2696,12 +2696,12 @@ __metadata:
     firebase: ^11.9.1
     firebase-tools: ^14.8.0
     globals: ^16.2.0
-    js-confetti: ^0.12.0
     postcss: ^8.5.6
     postcss-preset-mantine: ^1.17.0
     postcss-simple-vars: ^7.0.1
     react: ^19.1.0
     react-dom: ^19.1.0
+    react-qrcode-logo: ^4.0.0
     rxjs: ^7.8.2
     typescript: ~5.8.3
     typescript-eslint: ^8.34.1
@@ -5408,13 +5408,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-confetti@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "js-confetti@npm:0.12.0"
-  checksum: 0ee29b359b35412c6344b9c029be383b53c9c9bf6f7efc00fd93a4e734b3a4e2b94ef26f7a0a4b09c2f848ee0e4f39ec7623a266c62c5007585bb80f4f37db95
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -7071,6 +7064,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qrcode-generator@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "qrcode-generator@npm:2.0.4"
+  checksum: d0a212e5126f0fe8f7238cc944f74eed57a8deadf7ec75cf5b052e254ae1fb4487732b0f2e856f3dfbb47e7482b31a9e5cbf3658bbf7fb85624f0dae6a6143e9
+  languageName: node
+  linkType: hard
+
 "qs@npm:6.13.0":
   version: 6.13.0
   resolution: "qs@npm:6.13.0"
@@ -7194,6 +7194,18 @@ __metadata:
     react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 680b0cb5a2ac7ac287bf10def8c73aa48c6c8a856c0c98db8002989bea0acb659ccc93c26c55da6d4a563940d146100d79f333ad93313d28156b1d8c0d9dad66
+  languageName: node
+  linkType: hard
+
+"react-qrcode-logo@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "react-qrcode-logo@npm:4.0.0"
+  dependencies:
+    qrcode-generator: ^2.0.4
+  peerDependencies:
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 752a37626f65ea385f64ba22ce4b510813b15f21b20e0a71396f49786cf10e97616ac63b25431c8df5f265b1ead08aa110ded4dea81a89e614fe0bad20ebc759
   languageName: node
   linkType: hard
 

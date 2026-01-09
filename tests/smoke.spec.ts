@@ -2,7 +2,7 @@ import { test } from './fixtures/test';
 import { UserDevice } from './fixtures/UserDevice';
 import { expect } from '@playwright/test';
 import { expectLoginPageVisible } from './util/login/expectLoginPageVisible';
-import { getLoginNextButton } from './util/login/getLoginNextButton';
+import { getLoginContinueButton } from './util/login/getLoginContinueButton';
 import { goToHome } from './util/home/goToHome';
 import { getHomeStartSessionButton } from './util/home/getHomeStartSessionButton';
 import { expectLoginChooseNameLabelToBeShaking } from './util/login/expectLoginChooseNameLabelToBeShaking';
@@ -12,6 +12,19 @@ import { expectLoginChooseNameLabelNotToBeShaking } from './util/login/expectLog
 import { expectLobbyPageVisible } from './util/lobby/expectLobbyPageVisible';
 import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
 import { expectMatchPageVisible } from './util/match/expectMatchPageVisible';
+import { getMatchRevealMoneyButton } from './util/match/getMatchRevealMoneyButton';
+import { expectMatchMoneyToBe } from './util/match/expectMatchMoneyToBe';
+import { getLoginSelectMoneyPresetsButton } from './util/login/getLoginSelectMoneyPresetsButton';
+import { getLoginMoneyOnStartTextbox } from './util/login/getLoginMoneyOnStartTextbox';
+import { getLoginSelectMoneyPresetsSaveButton } from './util/login/getLoginSelectMoneyPresetsSaveButton';
+import { getMatchHideMoneyButton } from './util/match/getMatchHideMoneyButton';
+import { getMatchTransferButtonToUser } from './util/match/getMatchTransferButtonToUser';
+import { getMatchTransferAmountTextbox } from './util/match/getMatchTransferAmountTextbox';
+import { getMatchTransferTransferButton } from './util/match/getMatchTransferTransferButton';
+import { getMatchBankerTabButton } from './util/match/getMatchBankerTabButton';
+import { getMatchUserTabButton } from './util/match/getMatchUserTabButton';
+import { getLoginColorButton } from './util/login/getLoginColorButton';
+import { copyJoinURL } from './util/lobby/copyJoinURL';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -27,29 +40,26 @@ test('Smoke test', async ({ users }) => {
 	});
 
 	await test.step('User 1: Login', async () => {
-		await getLoginNextButton(user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLoginChooseNameLabelToBeShaking(user1.page);
 		await expectLoginChooseColorLabelToBeShaking(user1.page);
 
 		await getLoginNameTextbox(user1.page).fill('User 1');
-		await getLoginNextButton(user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLoginChooseColorLabelToBeShaking(user1.page);
 		await expectLoginChooseNameLabelNotToBeShaking(user1.page);
 
-		await user1.page.locator('button:nth-child(2)').click(); // TODO: add testIds to buttons
-		await getLoginNextButton(user1.page).click();
+		await getLoginColorButton('blue', user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLobbyPageVisible(user1.page);
 		await expectLobbyToHaveUsers(user1.page, ['User 1']);
 	});
 
 	const joinSessionLink = await test.step('copy join session link', async () => {
-		await user1.browserContext.grantPermissions(["clipboard-read", "clipboard-write"]);
-
-		await user1.page.getByRole('button', { name: 'Copy link' }).click();
-		const link = await user1.page.evaluate(() => navigator.clipboard.readText());
+		const link = await copyJoinURL(user1);
 
 		expect(link).toContain('http://127.0.0.1:5000/?s=');
 		return link;
@@ -61,8 +71,8 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user2.page);
 
 		await getLoginNameTextbox(user2.page).fill('User 2');
-		await user2.page.locator('button:nth-child(7)').click(); // TODO: add testIds to buttons
-		await getLoginNextButton(user2.page).click();
+		await getLoginColorButton('white', user2.page).click();
+		await getLoginContinueButton(user2.page).click();
 
 		await expectLobbyPageVisible(user2.page);
 		await expectLobbyToHaveUsers(user2.page, ['User 1', 'User 2']);
@@ -74,8 +84,8 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user3.page);
 
 		await getLoginNameTextbox(user3.page).fill('User 3');
-		await user3.page.locator('button:nth-child(8)').click(); // TODO: add testIds to buttons
-		await getLoginNextButton(user3.page).click();
+		await getLoginColorButton('black', user3.page).click();
+		await getLoginContinueButton(user3.page).click();
 
 		await expectLobbyPageVisible(user3.page);
 		await expectLobbyToHaveUsers(user3.page, ['User 1', 'User 2', 'User 3']);
@@ -87,16 +97,72 @@ test('Smoke test', async ({ users }) => {
 		await expectLoginPageVisible(user4.page);
 
 		await getLoginNameTextbox(user4.page).fill('User 4');
-		await user4.page.locator('button:nth-child(3)').click(); // TODO: add testIds to buttons
-		await getLoginNextButton(user4.page).click();
+		await getLoginColorButton('green', user4.page).click();
+		await getLoginContinueButton(user4.page).click();
 
 		await expectLobbyPageVisible(user4.page);
 		await users.forEach(page => expectLobbyToHaveUsers(page, ['User 1', 'User 2', 'User 3', 'User 4']));
 	});
 
-	await test.step('Start game', async () => {
+	await test.step('User 1: Setup $100 as starting money', async () => {
+		await getLoginSelectMoneyPresetsButton(user1.page).click();
+		await getLoginMoneyOnStartTextbox(user1.page).fill('100');
+		await getLoginSelectMoneyPresetsSaveButton(user1.page).click();
+	});
+
+	await test.step('User 1: Start game', async () => {
 		await user1.page.getByRole('button', { name: 'Play' }).click();
 
 		await users.forEach(page => expectMatchPageVisible(page));
-	})
-})
+	});
+
+	await test.step('View money amount for each user', async () => {
+		await users.forEach(async (page) => {
+			await getMatchRevealMoneyButton(page).click();
+			await expectMatchMoneyToBe('$100', page);
+			await getMatchHideMoneyButton(page).click();
+		});
+	});
+
+	await test.step('user 1: transfer $20 to user 2', async () => {
+		await getMatchTransferButtonToUser('User 2', user1.page).click();
+		await getMatchTransferAmountTextbox(user1.page).fill('20');
+		await getMatchTransferTransferButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user1.page).click();
+		await expectMatchMoneyToBe('$80', user1.page);
+		await getMatchHideMoneyButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user2.page).click();
+		await expectMatchMoneyToBe('$120', user2.page);
+		await getMatchHideMoneyButton(user2.page).click();
+	});
+
+	await test.step('user 2: transfer $30 to banker', async () => {
+		await getMatchTransferButtonToUser('Banker', user2.page).click();
+		await getMatchTransferAmountTextbox(user2.page).fill('30');
+		await getMatchTransferTransferButton(user2.page).click();
+
+		await getMatchRevealMoneyButton(user2.page).click();
+		await expectMatchMoneyToBe('$90', user2.page);
+		await getMatchHideMoneyButton(user2.page).click();
+	});
+
+	await test.step('user 1: transfer $10 to user 3 as banker', async () => {
+		await getMatchBankerTabButton(user1.page).click();
+
+		await getMatchTransferButtonToUser('User 3', user1.page).click();
+		await getMatchTransferAmountTextbox(user1.page).fill('10');
+		await getMatchTransferTransferButton(user1.page).click();
+
+		await getMatchUserTabButton('User 1', user1.page).click();
+
+		await getMatchRevealMoneyButton(user1.page).click();
+		await expectMatchMoneyToBe('$80', user1.page);
+		await getMatchHideMoneyButton(user1.page).click();
+
+		await getMatchRevealMoneyButton(user3.page).click();
+		await expectMatchMoneyToBe('$110', user3.page);
+		await getMatchHideMoneyButton(user3.page).click();
+	});
+});

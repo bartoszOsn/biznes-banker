@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import type { DomainWithoutStarting } from '../Domain.ts';
 import type { Session } from '../model/Session.ts';
 import { DomainContext } from '../DomainContext.ts';
@@ -29,7 +29,7 @@ export function DomainWithoutStartingProvider(props: DomainWithoutStartingProvid
 	const kickUser = useKickUser(session);
 	const changeUsernameAndColor = useChangeUsernameAndColor(session, me);
 
-	const asBanker: DomainWithoutStarting['asBanker'] = me.isAlsoBanker
+	const asBanker: DomainWithoutStarting['asBanker'] = useMemo(() => me.isAlsoBanker
 		? {
 			presets,
 			startingMoney,
@@ -37,7 +37,7 @@ export function DomainWithoutStartingProvider(props: DomainWithoutStartingProvid
 			setStartingMoney,
 			setPresets,
 			kickUser
-		} : null;
+		} : null, [kickUser, me.isAlsoBanker, presets, setPresets, setStartingMoney, startGame, startingMoney]);
 
 	const domain: DomainWithoutStarting = {
 		stage: 'withoutStarting',

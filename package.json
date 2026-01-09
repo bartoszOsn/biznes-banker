@@ -4,7 +4,7 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "yarn firebase emulators:exec \"yarn vite\"",
 		"build": "tsc -b && vite build",
 		"build:emulator": "tsc -b && vite build --mode emulator",
 		"e2e:ci": "yarn firebase emulators:exec \"yarn build:emulator && yarn playwright test --config=playwright.config.ts --reporter=github --output=playwright-report\"",
@@ -20,9 +20,9 @@
 		"@mantine/notifications": "^8.1.2",
 		"@tabler/icons-react": "^3.34.0",
 		"firebase": "^11.9.1",
-		"js-confetti": "^0.12.0",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
+		"react-qrcode-logo": "^4.0.0",
 		"rxjs": "^7.8.2"
 	},
 	"devDependencies": {

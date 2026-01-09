@@ -32,6 +32,7 @@ export function ScreenTransition({ children, transitionDuration = 300 }: ScreenT
 		overlay.style.transition = `opacity ${transitionDuration}ms ease-in-out`;
 	}, [transitionDuration]);
 
+	// TODO: sometimes the html is not captured correctly, namely when there is transition from login to lobby.
 	useLayoutEffect(() => {
 		if (!boxRef.current || !html) return;
 

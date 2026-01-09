@@ -1,16 +1,14 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
-import { UserColor } from '../../domain/model/UserColor.ts';
-import { Avatar, Box, Button, Image, Stack, Text, TextInput } from '@mantine/core';
-import dollarGrid from '../../assets/dollar-grid.webp';
+import { UserColor, userColorToMantine } from '../../domain/model/UserColor.ts';
+import { Avatar, Box, Button, Image, Stack, Text, TextInput, Title } from '@mantine/core';
 import capitalist from '../../assets/capitalist.svg';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { UserColorPicker } from '../common/UserColorPicker.tsx';
-import { fireMoneyConfetti } from '../util/fireMoneyConfetti.ts';
 import { useShake } from '../../util/useShake.ts';
 
 export function LoginView() {
 	const domain = useDomainOfType('withoutUser');
-	const placeholder = useMemo(randomFunnyName, [])
+	const placeholder = useFunnyName();
 	const [name, setName] = useState<string>('');
 	const [color, setColor] = useState<UserColor | null>(null);
 	const [shakeName, triggerShakeName] = useShake();
@@ -29,70 +27,106 @@ export function LoginView() {
 			return;
 		}
 
-		fireMoneyConfetti();
 		domain.setUserProps(name, color);
 	}, [name, color, domain, triggerShakeName, triggerShakeColor]);
 
 	return (
-		<Box style={{
-			background: 'linear-gradient(45deg,var(--mantine-color-green-filled) 0%, var(--mantine-color-lime-filled) 100%)'
-		}}>
-			<Box style={{
-				backgroundImage: `url(${dollarGrid})`,
-				backgroundSize: '140px 140px',
-				backgroundRepeat: 'repeat'
-			}}>
-				<Stack w={'100%'}
-					   h={'100vh'}
-					   px={16}
-					   pt={48}
-					   gap={32}
-					   align={'center'}>
-					<Avatar size={'xl'}
-							radius={'md'}
-							variant={'filled'}
-							color={'blue'}>
-						<Image src={capitalist} alt={'Capitalist Logo'}/>
-					</Avatar>
-					<Stack gap={10} align={'center'}>
-						<Text c="white"
-							  style={{
-								  textAlign: 'center',
-								  textTransform: 'uppercase',
-								  animationName: shakeName ? 'shake' : undefined,
-								  animationDuration: '300ms'
-							  }}>
-							Choose your name
-						</Text>
-						<TextInput placeholder={placeholder} value={name} onChange={(e) => setName(e.target.value)}/>
-					</Stack>
-					<Stack gap={10} align={'center'}>
-						<Text c="white"
-							  style={{
-								  textAlign: 'center',
-								  textTransform: 'uppercase',
-								  animationName: shakeColor ? 'shake' : undefined,
-								  animationDuration: '300ms'
-							  }}>
-							Select a color
-						</Text>
-						<UserColorPicker value={color ?? undefined} onChange={setColor}/>
-					</Stack>
-					<Button variant={'gradient'} gradient={{from: 'blue', to: 'teal', deg: 90}} onClick={onNext}>Next</Button>
-				</Stack>
+		<Stack w={'100%'}
+			   mih={'100vh'}
+			   px={16}
+			   pt={48}
+			   gap={24}
+			   align={'center'}>
+			<Avatar size={'xl'}
+					radius={'md'}
+					variant={'filled'}
+					color={color ? userColorToMantine(color) : 'gray'}>
+				<Image src={capitalist} alt={'Capitalist Logo'}/>
+			</Avatar>
+			<Box ta="center">
+				<Title>Welcome!</Title>
+				<Text c="dimmed">Let other players recognize you!</Text>
 			</Box>
-		</Box>
+			<Stack w={'100%'}
+				   gap={16}
+				   align={'center'}>
+				<Stack gap={10} w="100%">
+					<Text fw="bold" style={{
+						animationName: shakeName ? 'shake' : undefined,
+						animationDuration: '300ms'
+					}}>
+						Choose your name
+					</Text>
+					<TextInput w="100%" placeholder={placeholder} value={name} onChange={(e) => setName(e.target.value)}/>
+				</Stack>
+				<Stack gap={10} w="100%" align="center">
+					<Text fw="bold" style={{
+						alignSelf: 'start',
+						animationName: shakeColor ? 'shake' : undefined,
+						animationDuration: '300ms'
+					}}>
+						Select a color
+					</Text>
+					<UserColorPicker value={color ?? undefined} onChange={setColor}/>
+				</Stack>
+				<Button fullWidth mt="sm" data-disabled={!name || !color} onClick={onNext}>Continue</Button>
+			</Stack>
+
+		</Stack>
 	);
 }
 
-function randomFunnyName() {
-	const names = [
-		'Sułtan',
-		'Księciuno',
-		'Kapytalista',
-		'Kapitano',
-		'Chachmęt'
-	];
+function useFunnyName() {
+	const [name, setNameInt] = useState<string>('');
 
-	return names[Math.floor(Math.random() * names.length)];
+	useEffect(() => {
+		const running = {current: true};
+
+		function setName(newName: string) {
+			if (!running.current) {
+				return;
+			}
+			setNameInt(newName);
+		}
+
+		const names = [
+			'Sułtan',
+			'Księciuno',
+			'Kapytalista',
+			'Kapitano',
+			'Chachmęt',
+			'Pan Prezes',
+			'SzefaSyn'
+		];
+
+		(async () => {
+			while (running.current) {
+				names.sort(() => Math.random() - 0.5);
+
+				for (const newName of names) {
+					for (let i = 0; i <= newName.length; i++) {
+						setName(newName.slice(0, i));
+						await new Promise(res => setTimeout(res, 100));
+					}
+
+					await new Promise(res => setTimeout(res, 3000));
+
+					for (let i = newName.length - 1; i >= 0; i--) {
+						setName(newName.slice(0, i));
+						await new Promise(res => setTimeout(res, 100));
+					}
+					if (!running.current) {
+						return;
+					}
+				}
+
+			}
+		})();
+
+		return () => {
+			running.current = false;
+		};
+	}, []);
+
+	return name;
 }
