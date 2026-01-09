@@ -53,16 +53,6 @@ export class UserManagerImpl extends UserManager {
 			...userDeviceToDeviceDescriptor[device],
 		});
 		const page = await browserContext.newPage();
-		await page.addInitScript(() => {
-			const oldAppendChild = Element.prototype.appendChild;
-			Element.prototype.appendChild = function (element) {
-				if (element instanceof HTMLCanvasElement) {
-					return element;
-				}
-				return oldAppendChild.call(this, element);
-			};
-		})
-
 		return { page, browserContext, browser };
 	}
 }

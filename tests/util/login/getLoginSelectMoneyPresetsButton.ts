@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
 
 export function getLoginSelectMoneyPresetsButton(page: Page) {
-	return page.getByRole('button', { name: 'Select money presets' });
+	return page.getByTestId('money-preset-button');
 }

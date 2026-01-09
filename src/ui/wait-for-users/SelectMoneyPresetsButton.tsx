@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 import type { Preset } from '../../domain/model/Preset.ts';
-import { IconTrash } from '@tabler/icons-react';
+import { IconSettings, IconTrash } from '@tabler/icons-react';
 
 export function SelectMoneyPresetsButton() {
 	const domain = useDomainOfType('withoutStarting');
@@ -65,7 +65,7 @@ export function SelectMoneyPresetsButton() {
 
 	return (
 		<>
-			<Button variant={'subtle'} color='white' onClick={open}>Select money presets</Button>
+			<Button size="lg" onClick={open} data-testid='money-preset-button'><IconSettings size={32} /></Button>
 			<Modal opened={opened} onClose={onClose} title='Select money presets'>
 				<Stack>
 					<NumberInput mb="md"
