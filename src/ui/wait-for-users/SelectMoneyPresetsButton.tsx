@@ -65,7 +65,7 @@ export function SelectMoneyPresetsButton() {
 
 	return (
 		<>
-			<Button size="lg" onClick={open}><IconSettings size={32} /></Button>
+			<Button size="lg" onClick={open} data-testid='money-preset-button'><IconSettings size={32} /></Button>
 			<Modal opened={opened} onClose={onClose} title='Select money presets'>
 				<Stack>
 					<NumberInput mb="md"

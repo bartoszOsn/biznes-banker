@@ -2,7 +2,7 @@ import { test } from './fixtures/test';
 import { UserDevice } from './fixtures/UserDevice';
 import { expect } from '@playwright/test';
 import { expectLoginPageVisible } from './util/login/expectLoginPageVisible';
-import { getLoginNextButton } from './util/login/getLoginNextButton';
+import { getLoginContinueButton } from './util/login/getLoginContinueButton';
 import { goToHome } from './util/home/goToHome';
 import { getHomeStartSessionButton } from './util/home/getHomeStartSessionButton';
 import { expectLoginChooseNameLabelToBeShaking } from './util/login/expectLoginChooseNameLabelToBeShaking';
@@ -24,6 +24,7 @@ import { getMatchTransferTransferButton } from './util/match/getMatchTransferTra
 import { getMatchBankerTabButton } from './util/match/getMatchBankerTabButton';
 import { getMatchUserTabButton } from './util/match/getMatchUserTabButton';
 import { getLoginColorButton } from './util/login/getLoginColorButton';
+import { copyJoinURL } from './util/lobby/copyJoinURL';
 
 test('Smoke test', async ({ users }) => {
 	const user1 = await users.create(UserDevice.SamsungGalaxyS24);
@@ -39,29 +40,26 @@ test('Smoke test', async ({ users }) => {
 	});
 
 	await test.step('User 1: Login', async () => {
-		await getLoginNextButton(user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLoginChooseNameLabelToBeShaking(user1.page);
 		await expectLoginChooseColorLabelToBeShaking(user1.page);
 
 		await getLoginNameTextbox(user1.page).fill('User 1');
-		await getLoginNextButton(user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLoginChooseColorLabelToBeShaking(user1.page);
 		await expectLoginChooseNameLabelNotToBeShaking(user1.page);
 
 		await getLoginColorButton('blue', user1.page).click();
-		await getLoginNextButton(user1.page).click();
+		await getLoginContinueButton(user1.page).click();
 
 		await expectLobbyPageVisible(user1.page);
 		await expectLobbyToHaveUsers(user1.page, ['User 1']);
 	});
 
 	const joinSessionLink = await test.step('copy join session link', async () => {
-		await user1.browserContext.grantPermissions(["clipboard-read", "clipboard-write"]);
-
-		await user1.page.getByRole('button', { name: 'Copy link' }).click();
-		const link = await user1.page.evaluate(() => navigator.clipboard.readText());
+		const link = await copyJoinURL(user1);
 
 		expect(link).toContain('http://127.0.0.1:5000/?s=');
 		return link;
@@ -74,7 +72,7 @@ test('Smoke test', async ({ users }) => {
 
 		await getLoginNameTextbox(user2.page).fill('User 2');
 		await getLoginColorButton('white', user2.page).click();
-		await getLoginNextButton(user2.page).click();
+		await getLoginContinueButton(user2.page).click();
 
 		await expectLobbyPageVisible(user2.page);
 		await expectLobbyToHaveUsers(user2.page, ['User 1', 'User 2']);
@@ -87,7 +85,7 @@ test('Smoke test', async ({ users }) => {
 
 		await getLoginNameTextbox(user3.page).fill('User 3');
 		await getLoginColorButton('black', user3.page).click();
-		await getLoginNextButton(user3.page).click();
+		await getLoginContinueButton(user3.page).click();
 
 		await expectLobbyPageVisible(user3.page);
 		await expectLobbyToHaveUsers(user3.page, ['User 1', 'User 2', 'User 3']);
@@ -100,7 +98,7 @@ test('Smoke test', async ({ users }) => {
 
 		await getLoginNameTextbox(user4.page).fill('User 4');
 		await getLoginColorButton('green', user4.page).click();
-		await getLoginNextButton(user4.page).click();
+		await getLoginContinueButton(user4.page).click();
 
 		await expectLobbyPageVisible(user4.page);
 		await users.forEach(page => expectLobbyToHaveUsers(page, ['User 1', 'User 2', 'User 3', 'User 4']));

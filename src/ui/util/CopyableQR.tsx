@@ -18,11 +18,11 @@ export function CopyableQR({ value }: CopyableQRProps) {
 			: undefined;
 
 	return (
-		<UnstyledButton pos='relative' onClick={() => clipboard.copy(value)}>
+		<UnstyledButton pos='relative' data-testid='QR-copy-button' onClick={() => clipboard.copy(value)}>
 			<QRCode
 				value={value}
 				eyeRadius={1}
-				fgColor={feedbackColor }
+				fgColor={feedbackColor}
 			/>
 			<Box bg='white' style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: feedbackColor ? 0.8 : 0, pointerEvents: 'none' }}>
 				{ clipboard.copied && <IconClipboardCheck color={feedbackColor} size={64} /> }
