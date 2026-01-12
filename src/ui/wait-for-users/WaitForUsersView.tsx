@@ -3,19 +3,30 @@ import { ActionIcon, Button, Card, ColorSwatch, Stack, Table, Text, Title } from
 import { IconBuildingBank, IconX } from '@tabler/icons-react';
 import type { User } from '../../domain/model/User.ts';
 import { userColorToMantineVar } from '../../domain/model/UserColor.ts';
-import { type ReactNode, useCallback } from 'react';
-import { SelectMoneyPresetsButton } from './SelectMoneyPresetsButton.tsx';
+import { type ReactNode, useCallback, useState } from 'react';
+import { SelectMoneyPresetsCard } from './SelectMoneyPresetsCard.tsx';
 import { ChangeUsernameAndColorButton } from './ChangeUsernameAndColorButton.tsx';
 import { CopyableQR } from '../util/CopyableQR.tsx';
+import type { Preset } from '../../domain/model/Preset.ts';
+import { useShake } from '../../util/useShake.ts';
 
 export function WaitForUsersView() {
 	const domain = useDomainOfType('withoutStarting');
 
+	const [startingMoney, setStartingMoney] = useState<number | null>(null);
+	const [presets, setPresets] = useState<Preset[]>([]);
+	const  [startingMoneyShake, triggerStartingMoneyShake] = useShake();
+
 	const onPlay = useCallback(() => {
 		if (domain.asBanker) {
-			domain.asBanker.startGame();
+			if (startingMoney === null) {
+				triggerStartingMoneyShake();
+				return;
+			}
+
+			domain.asBanker.startGame(startingMoney, presets);
 		}
-	}, [domain.asBanker]);
+	}, [domain.asBanker, presets, startingMoney]);
 
 	return (
 		<Stack w={'100%'}
@@ -23,7 +34,7 @@ export function WaitForUsersView() {
 			   px={16}
 			   pt={64}
 			   pb={32}
-			   gap={32}
+			   gap='lg'
 			   bg="gray.0"
 			   align={'center'}>
 			<Title style={{textAlign: 'center'}}>Waiting for other players</Title>
@@ -34,6 +45,13 @@ export function WaitForUsersView() {
 				</Stack>
 				<Text size="xs" style={{textAlign: 'center'}}>Or tap QR code to copy link</Text>
 			</Card>
+			{
+				domain.asBanker && <SelectMoneyPresetsCard startingMoney={startingMoney}
+														   presets={presets}
+														   onPresetsChange={setPresets}
+														   onStartingMoneyChange={setStartingMoney}
+														   shakeStartingMoneyLabel={startingMoneyShake}/>
+			}
 			<Card w="100%" withBorder>
 				<Title order={4} ta="center" mb="md">Already joined</Title>
 				<Table withRowBorders={false}>
@@ -63,12 +81,7 @@ export function WaitForUsersView() {
 				</Table>
 			</Card>
 			{
-				domain.asBanker && (
-					<Button.Group w='100%'>
-						<Button fullWidth size="lg" onClick={onPlay}>Play</Button>
-						<SelectMoneyPresetsButton/>
-					</Button.Group>
-				)
+				domain.asBanker && <Button fullWidth size="lg" data-disabled={startingMoney === null} onClick={onPlay}>Play</Button>
 			}
 		</Stack>
 	)
