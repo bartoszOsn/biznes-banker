@@ -4,15 +4,11 @@ import { goToHome } from './util/home/goToHome';
 import { getHomeStartSessionButton } from './util/home/getHomeStartSessionButton';
 import { expectLoginPageVisible } from './util/login/expectLoginPageVisible';
 import { getLoginContinueButton } from './util/login/getLoginContinueButton';
-import { expectLoginChooseNameLabelToBeShaking } from './util/login/expectLoginChooseNameLabelToBeShaking';
-import { expectLoginChooseColorLabelToBeShaking } from './util/login/expectLoginChooseColorLabelToBeShaking';
 import { getLoginNameTextbox } from './util/login/getLoginNameTextbox';
-import { expectLoginChooseNameLabelNotToBeShaking } from './util/login/expectLoginChooseNameLabelNotToBeShaking';
 import { getLoginColorButton } from './util/login/getLoginColorButton';
 import { expectLobbyPageVisible } from './util/lobby/expectLobbyPageVisible';
 import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
 import { expect } from '@playwright/test';
-import { getLoginSelectMoneyPresetsButton } from './util/login/getLoginSelectMoneyPresetsButton';
 import { getLoginMoneyOnStartTextbox } from './util/login/getLoginMoneyOnStartTextbox';
 import { getLoginSelectMoneyAddPresetButton } from './util/login/getLoginSelectMoneyAddPresetButton';
 import { getLoginSelectMoneyPresetTitleTextboxes } from './util/login/getLoginSelectMoneyPresetTitleTextboxes';
@@ -47,7 +43,6 @@ test('Presets are not reset when a new user joins a session', async ({ users }) 
 	});
 
 	await test.step('User 1: Start setting presets', async () => {
-		await getLoginSelectMoneyPresetsButton(user1.page).click();
 		await getLoginMoneyOnStartTextbox(user1.page).fill('100');
 		await getLoginSelectMoneyAddPresetButton(user1.page).click();
 		await getLoginSelectMoneyPresetTitleTextboxes(user1.page).nth(0).fill('Preset 1');
