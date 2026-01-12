@@ -14,9 +14,7 @@ import { expectLobbyToHaveUsers } from './util/lobby/expectLobbyToHaveUsers';
 import { expectMatchPageVisible } from './util/match/expectMatchPageVisible';
 import { getMatchRevealMoneyButton } from './util/match/getMatchRevealMoneyButton';
 import { expectMatchMoneyToBe } from './util/match/expectMatchMoneyToBe';
-import { getLoginSelectMoneyPresetsButton } from './util/login/getLoginSelectMoneyPresetsButton';
 import { getLoginMoneyOnStartTextbox } from './util/login/getLoginMoneyOnStartTextbox';
-import { getLoginSelectMoneyPresetsSaveButton } from './util/login/getLoginSelectMoneyPresetsSaveButton';
 import { getMatchHideMoneyButton } from './util/match/getMatchHideMoneyButton';
 import { getMatchTransferButtonToUser } from './util/match/getMatchTransferButtonToUser';
 import { getMatchTransferAmountTextbox } from './util/match/getMatchTransferAmountTextbox';
@@ -105,9 +103,7 @@ test('Smoke test', async ({ users }) => {
 	});
 
 	await test.step('User 1: Setup $100 as starting money', async () => {
-		await getLoginSelectMoneyPresetsButton(user1.page).click();
 		await getLoginMoneyOnStartTextbox(user1.page).fill('100');
-		await getLoginSelectMoneyPresetsSaveButton(user1.page).click();
 	});
 
 	await test.step('User 1: Start game', async () => {
