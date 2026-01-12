@@ -1,7 +1,7 @@
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 import { Avatar, Box, Button, Image, List, Stack, Text, ThemeIcon, Title } from '@mantine/core';
 import capitalist from '../../assets/capitalist.svg';
-import hero from '../../assets/hero.png';
+import hero from '../../assets/hero.jpg';
 import { useCallback } from 'react';
 import { IconCheck, IconCurrencyDollar } from '@tabler/icons-react';
 
