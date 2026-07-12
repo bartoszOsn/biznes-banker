@@ -18,6 +18,9 @@ export function useWakeLock() {
 				}
 			} catch (err) {
 				console.error('Wake lock request failed:', JSON.stringify(err, null, 2));
+				if (err instanceof DOMException) {
+					console.error(`Message: ${err.message}; Cause: ${err.cause}`);
+				}
 			}
 		}
 
