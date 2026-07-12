@@ -13,9 +13,11 @@ export function useWakeLock() {
 
 					// Re-request wake lock on visibility change (e.g., when tab is hidden then shown again)
 					document.addEventListener('visibilitychange', handleVisibilityChange);
+				} else {
+					console.error('Wake lock request failed: Wake lock not supported');
 				}
 			} catch (err) {
-				console.error('Wake lock request failed:', err);
+				console.error('Wake lock request failed:', JSON.stringify(err, null, 2));
 			}
 		}
 
