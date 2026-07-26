@@ -39,16 +39,16 @@ export function SoundPlayerProvider({ children }: { children: ReactNode}): React
 		playMoneySound
 	};
 
-	useEffect(() => {
-		if (muted) {
-			const handler = () => {
-				unmute().then();
-				document.body.removeEventListener('click', handler);
-			}
-
-			document.body.addEventListener('click', handler);
-		}
-	}, [muted, unmute]);
+	// useEffect(() => {
+	// 	if (muted) {
+	// 		const handler = () => {
+	// 			unmute().then();
+	// 			document.body.removeEventListener('click', handler);
+	// 		}
+	//
+	// 		document.body.addEventListener('click', handler);
+	// 	}
+	// }, [muted, unmute]);
 
 	return (
 		<SoundPlayerContext.Provider value={player}>
