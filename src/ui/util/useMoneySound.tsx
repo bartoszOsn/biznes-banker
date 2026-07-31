@@ -5,11 +5,11 @@ import { Button, Stack, Text } from '@mantine/core';
 const audio = new Audio(moneySrc);
 let notificationId: string | null = null;
 
-export function useMoneySound(): () => void {
-	return () => {
+export function useMoneySound(): () => Promise<void> {
+	return async () => {
 		try {
 			audio.currentTime = 0;
-			void audio.play();
+			await audio.play();
 		} catch {
 			if (notificationId) {
 				notifications.hide(notificationId);

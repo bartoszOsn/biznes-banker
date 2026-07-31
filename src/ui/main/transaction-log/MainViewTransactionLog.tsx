@@ -55,7 +55,7 @@ function useSoundEffectOnMoney(domain: MainDomain): void {
 
 	useEffect(() => {
 		if (lastTransaction && lastTransaction.toUserId === domain.me.id) {
-			playMoneySound();
+			void playMoneySound();
 		}
 	}, [lastTransaction?.toUserId, lastTransaction?.timestamp, domain.me.id]);
 }
