@@ -6,7 +6,7 @@ import { MainViewUserView } from './user/MainViewUserView.tsx';
 import { MainViewBankerView } from './banker/MainViewBankerView.tsx';
 import { useDomainOfType } from '../../domain/useDomainOfType.ts';
 import { MainViewTransactionLog } from './transaction-log/MainViewTransactionLog.tsx';
-import { useWakeLock } from '../util/useWakeLock.ts';
+import { useWakeLock } from '../util/useWakeLock.tsx';
 
 export function MainView() {
 	const domain = useDomainOfType('main');
