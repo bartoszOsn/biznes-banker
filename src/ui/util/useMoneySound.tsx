@@ -1,6 +1,7 @@
 import moneySrc from '../../assets/money.mp3';
 import { notifications } from '@mantine/notifications';
 import { Button, Stack, Text } from '@mantine/core';
+import { IconBellRinging } from '@tabler/icons-react';
 
 const audio = new Audio(moneySrc);
 let notificationId: string | null = null;
@@ -13,18 +14,21 @@ export function useMoneySound(): () => Promise<void> {
 		} catch {
 			if (notificationId) {
 				notifications.hide(notificationId);
+				notificationId = null;
 			}
 
 			notificationId = notifications.show({
 				autoClose: false,
 				withCloseButton: false,
-				title: 'Automatic screen lock prevention failed.',
+				title: 'User action needed.',
+				icon: <IconBellRinging />,
 				message: <>
 					<Stack>
 						<Text inherit>User interaction required to play notification sound.</Text>
 						<Button variant='light' size='compact-sm' style={{alignSelf: 'end'}} onClick={async () => {
 							if (notificationId) {
 								notifications.hide(notificationId);
+								notificationId = null;
 							}
 							try {
 								audio.currentTime = 0;
@@ -32,6 +36,7 @@ export function useMoneySound(): () => Promise<void> {
 							} catch {
 								notificationId = notifications.show({
 									title: 'Cannot play notification sound',
+									icon: <IconBellRinging />,
 									message: 'Notification sound playback is not supported by this browser.',
 									color: 'red'
 								})
