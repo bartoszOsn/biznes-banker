@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { notifications } from '@mantine/notifications';
 import { Button, Stack, Text } from '@mantine/core';
+import { IconDeviceMobile } from '@tabler/icons-react';
 
 export function useWakeLock() {
 	const wakeLockRef = useRef<WakeLockSentinel | null>(null);
@@ -25,6 +26,7 @@ export function useWakeLock() {
 					notificationIdRef.current = notifications.show({
 						autoClose: false,
 						withCloseButton: false,
+						icon: <IconDeviceMobile />,
 						title: 'Automatic screen lock prevention failed.',
 						message: <>
 							<Stack>
@@ -42,6 +44,7 @@ export function useWakeLock() {
 									} catch {
 										notificationIdRef.current = notifications.show({
 											title: 'Cannot prevent screen lock',
+											icon: <IconDeviceMobile />,
 											message: 'Screen lock prevention is not supported by this browser.',
 											color: 'red'
 										})
@@ -73,6 +76,10 @@ export function useWakeLock() {
 					console.error('Wake lock release failed:', err);
 				});
 				wakeLockRef.current = null;
+			}
+			if (notificationIdRef.current) {
+				notifications.hide(notificationIdRef.current);
+				notificationIdRef.current = null;
 			}
 		};
 	}, []);
